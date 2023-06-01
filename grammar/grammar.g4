@@ -5,8 +5,9 @@ start : statement+ EOF;
 
 // Instrukcje
 statement : variableDeclaration
-          | functionCall
-          | assignment
+          | functionCall SEMI
+          | assignment 
+          | expression SEMI
           ;
 
 // Deklaracja zmiennych
@@ -21,48 +22,25 @@ functionCallOnObject : ID DOT functionCall ;
 assignment : ID ASSIGN expression SEMI ;
 
 // Wyrażenia
-expression: ID
+expression : ID
     | INT
     | FLOAT
     | STRING
     | assignment
     | functionCall
-    | expression
-    | logicalExpr
+    | expression OR expression
+    | expression XOR expression 
+    | expression AND expression 
+    | expression EQ expression 
+    | EXCLAMATION expression 
     | mathExpr
+    | mathExpr (PLUS mathExpr)* 
+    | mathExpr (MINUS mathExpr)* 
+    | mathExpr (ASTERISK mathExpr)* 
+    | mathExpr (SLASH mathExpr)* 
     ;
 
-logicalExpr : logicalOrExpr
-    | logicalXorExpr
-    | logicalAndExpr
-    | negationExpr
-    | equalityExpr
-    ;
-
-logicalOrExpr : expression (OR expression)* ;
-
-logicalXorExpr : expression (XOR expression)* ;
-
-logicalAndExpr : expression (AND expression)* ;
-
-negationExpr : EXCLAMATION expression ;
-
-equalityExpr : expression ( EQ expression)* ;
-
-mathExpr : NUMBER (MATH_OPERATOR NUMBER)*
-    | additionExpr
-    | substractionExpr
-    | multiplicationExpr
-    | divisionExpr
-    ;
-
-additionExpr : mathExpr (PLUS mathExpr)* ;
-
-substractionExpr : mathExpr (MINUS mathExpr)* ;
-
-multiplicationExpr : mathExpr (ASTERISK mathExpr)* ;
-
-divisionExpr : mathExpr (SLASH mathExpr)* ;
+mathExpr : NUMBER (mathOperator NUMBER)* ;
 
 dataType : INT_KEY
     | FLOAT_KEY
@@ -86,22 +64,22 @@ LCURLY : '{' ;
 RCURLY : '}' ;
     
 INT_KEY: 'int' ;
-FLOAT_KEY: 'float'
-FLOAT_32_KEY: 'float32'
-FLOAT_64_KEY: 'float64'
+FLOAT_KEY: 'float';
+FLOAT_32_KEY: 'float32';
+FLOAT_64_KEY: 'float64';
 STRING_KEY: 'string' ;
 
 INT : [0-9]+ ;
-STRING: ".*?" ;
+STRING: DQ ~["\r\n]* DQ;
 FLOAT : INT DOT INT ;
 
 NUMBER : ( PLUS | MINUS )? (INT | FLOAT) ;
-PLUS: + ;
-MINUS: - ;
-ASTERISK: * ;
-SLASH: / ;
-DOT: . ;
+PLUS: '+' ;
+MINUS: '-' ;
+ASTERISK: '*' ;
+SLASH: '/';
+DOT: '.';
 EXCLAMATION: '!';
-
+DQ: '"';
 ID: [a-zA-Z_][a-zA-Z_0-9]* ;
 WS: [ \t\n\r\f]+ -> skip ;
