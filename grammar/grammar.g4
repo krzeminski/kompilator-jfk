@@ -21,17 +21,23 @@ assignment : ID '=' expression ';' ;
 // Wyrażenia
 expression : logicalOrExpr ;
 
-logicalOrExpr : logicalAndExpr ('||' logicalAndExpr)* ;
+logicalOrExpr : expression ('||' expression)* ;
 
-logicalAndExpr : equalityExpr ('&&' equalityExpr)* ;
+logicalAndExpr : expression ('&&' expression)* ;
 
-equalityExpr : comparisonExpr (('=' | '!=' | '==' | '^^') comparisonExpr)* ;
+equalityExpr : expression ( '==' expression)* ;
 
-comparisonExpr : additiveExpr (('>' | '>=' | '<' | '<=') additiveExpr)* ;
+comparisonExpr : expression (('>' | '>=' | '<' | '<=') expression)* ;
 
-additiveExpr : multiplicativeExpr (('+' | '-') multiplicativeExpr)* ;
+mathExpr : NUMBER (MATH_OPERATOR NUMBER)*;
 
-multiplicativeExpr : unaryExpr (('*' | '/') unaryExpr)* ;
+additionExpr : mathExpr (PLUS mathExpr)* ;
+
+substractionExpr : mathExpr (('+' | '-') mathExpr)* ;
+
+multiplicationExpr : mathExpr (('*' | '/') mathExpr)* ;
+
+divisionExpr : mathExpr (('*' | '/') mathExpr)* ;
 
 unaryExpr : ('!' | '-')? primaryExpr ;
 
@@ -55,5 +61,7 @@ dataType : 'int' | 'float' | 'float32' | 'float64' ;
 ID : [a-zA-Z]+ ;
 NUMBER : ('+' | '-')? DIGIT+ ('.' DIGIT+)? ;
 fragment DIGIT : [0-9] ;
+PLUS: + ;
+MATH_OPERATOR: PLUS | MINUS | ASTERISK | SLASH;
 
 WS : [ \t\r\n]+ -> skip ;  // Ignoruj białe znaki
