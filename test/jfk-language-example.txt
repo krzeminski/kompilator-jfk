@@ -12,7 +12,7 @@ x = 4 + 4 * 2 /4;
 arr = [];
 arr.push, .pop, .get, .length
 
-&& || != == 
+&& || != == ^^ //and or neg eq xor
 
 obsługa stringów .concat, .length, .toUpper .toLower
 
