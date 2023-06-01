@@ -22,6 +22,8 @@ functionCallOnObject : ID DOT functionCall ;
 
 functionCallOnString : STRING DOT functionCall ;
 
+array : LBRACK (expression (COMMA expression)*)? RBRACK ;
+
 // Przypisanie wartości
 assignment : ID ASSIGN expression SEMI;
 
@@ -38,6 +40,7 @@ expression : ID
     | INT
     | FLOAT
     | STRING
+    | array
     ;
 
 additiveExpression
@@ -85,6 +88,8 @@ LPAREN : '(' ;
 RPAREN : ')' ;
 LCURLY : '{' ;
 RCURLY : '}' ;
+LBRACK : '[' ;
+RBRACK : ']' ;
     
 INT_KEY: 'int' ;
 FLOAT_KEY: 'float';
