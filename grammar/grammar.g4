@@ -6,7 +6,9 @@ start : statement+ EOF;
 // Instrukcje
 statement : variableDeclaration
           | functionCall SEMI
-          | assignment 
+          | functionCallOnObject SEMI
+          | functionCallOnString SEMI
+          | assignment
           | expression SEMI
           ;
 
@@ -18,14 +20,13 @@ functionCall : ID LPAREN (expression (COMMA expression)*)? RPAREN ;
 
 functionCallOnObject : ID DOT functionCall ;
 
+functionCallOnString : STRING DOT functionCall ;
+
 // Przypisanie wartości
-assignment : ID ASSIGN expression SEMI ;
+assignment : ID ASSIGN expression SEMI;
 
 // Wyrażenia
 expression : ID
-    | INT
-    | FLOAT
-    | STRING
     | assignment
     | functionCall
     | expression OR expression
@@ -33,14 +34,36 @@ expression : ID
     | expression AND expression 
     | expression EQ expression 
     | EXCLAMATION expression 
-    | mathExpr
-    | mathExpr (PLUS mathExpr)* 
-    | mathExpr (MINUS mathExpr)* 
-    | mathExpr (ASTERISK mathExpr)* 
-    | mathExpr (SLASH mathExpr)* 
+    | additiveExpression
+    | INT
+    | FLOAT
+    | STRING
     ;
 
-mathExpr : NUMBER (mathOperator NUMBER)* ;
+additiveExpression
+    : multiplicativeExpression
+    | additiveExpression PLUS multiplicativeExpression
+    | additiveExpression MINUS multiplicativeExpression
+    ;
+
+multiplicativeExpression
+    : unaryExpression
+    | multiplicativeExpression ASTERISK unaryExpression
+    | multiplicativeExpression SLASH unaryExpression
+    ;
+
+unaryExpression
+    : primaryExpression
+    | PLUS unaryExpression
+    | MINUS unaryExpression
+    ;
+
+primaryExpression
+    : INT
+    | FLOAT
+    | LPAREN expression RPAREN
+    | ID
+    ;
 
 dataType : INT_KEY
     | FLOAT_KEY
@@ -69,11 +92,10 @@ FLOAT_32_KEY: 'float32';
 FLOAT_64_KEY: 'float64';
 STRING_KEY: 'string' ;
 
+FLOAT : INT DOT INT ;
 INT : [0-9]+ ;
 STRING: DQ ~["\r\n]* DQ;
-FLOAT : INT DOT INT ;
 
-NUMBER : ( PLUS | MINUS )? (INT | FLOAT) ;
 PLUS: '+' ;
 MINUS: '-' ;
 ASTERISK: '*' ;
