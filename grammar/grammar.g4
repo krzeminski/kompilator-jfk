@@ -1,4 +1,4 @@
-grammar MyLanguage;
+grammar Dallas;
 
 // Reguły startowe
 start : statement+ EOF;
@@ -10,26 +10,51 @@ statement : variableDeclaration
           ;
 
 // Deklaracja zmiennych
-variableDeclaration : dataType ID ';' ;
+variableDeclaration : dataType ID SEMI ;
 
 // Wywołanie funkcji
-functionCall : ID '(' (expression (',' expression)*)? ')' ';' ;
+functionCall : ID LPAREN (expression (COMMA expression)*)? RPAREN ;
+
+functionCallOnObject : ID DOT functionCall ;
 
 // Przypisanie wartości
-assignment : ID '=' expression ';' ;
+assignment : ID ASSIGN expression SEMI ;
 
 // Wyrażenia
-expression : logicalOrExpr ;
+expression: ID
+    | INT
+    | FLOAT
+    | STRING
+    | assignment
+    | functionCall
+    | expression
+    | logicalExpr
+    | mathExpr
+    ;
 
-logicalOrExpr : expression ('||' expression)* ;
+logicalExpr : logicalOrExpr
+    | logicalXorExpr
+    | logicalAndExpr
+    | negationExpr
+    | equalityExpr
+    ;
 
-logicalAndExpr : expression ('&&' expression)* ;
+logicalOrExpr : expression (OR expression)* ;
 
-equalityExpr : expression ( '==' expression)* ;
+logicalXorExpr : expression (XOR expression)* ;
 
-comparisonExpr : expression (('>' | '>=' | '<' | '<=') expression)* ;
+logicalAndExpr : expression (AND expression)* ;
 
-mathExpr : NUMBER (MATH_OPERATOR NUMBER)*;
+negationExpr : EXCLAMATION expression ;
+
+equalityExpr : expression ( EQ expression)* ;
+
+mathExpr : NUMBER (MATH_OPERATOR NUMBER)*
+    | additionExpr
+    | substractionExpr
+    | multiplicationExpr
+    | divisionExpr
+    ;
 
 additionExpr : mathExpr (PLUS mathExpr)* ;
 
@@ -39,34 +64,44 @@ multiplicationExpr : mathExpr (ASTERISK mathExpr)* ;
 
 divisionExpr : mathExpr (SLASH mathExpr)* ;
 
-unaryExpr : ('!' | '-')? primaryExpr ;
+dataType : INT_KEY
+    | FLOAT_KEY
+    | FLOAT_32_KEY
+    | FLOAT_64_KEY
+    | STRING_KEY
+    ;
 
-primaryExpr : ID
-            | NUMBER
-            | '(' expression ')'
-            | arrayOperations
-            | stringOperations
-            ;
+mathOperator: PLUS | MINUS | ASTERISK | SLASH;
 
-// Operacje na tablicach
-arrayOperations : ID ('.push' | '.pop' | '.get' | '.length') ;
+AND : '&&' ;
+OR : '||' ;
+XOR : '^^' ;
+EQ : '==' ;
+ASSIGN : '=';
+COMMA : ',' ;
+SEMI : ';' ;
+LPAREN : '(' ;
+RPAREN : ')' ;
+LCURLY : '{' ;
+RCURLY : '}' ;
+    
+INT_KEY: 'int' ;
+FLOAT_KEY: 'float'
+FLOAT_32_KEY: 'float32'
+FLOAT_64_KEY: 'float64'
+STRING_KEY: 'string' ;
 
-// Operacje na ciągach znaków
-stringOperations : ID ('.concat' | '.length' | '.toUpper' | '.toLower') ;
+INT : [0-9]+ ;
+STRING: ".*?" ;
+FLOAT : INT DOT INT ;
 
-// Typy danych
-dataType : 'int' | 'float' | 'float32' | 'float64' ;
-
-// Tokeny
-ID : [a-zA-Z]+ ;
-NUMBER : ('+' | '-')? DIGIT+ ('.' DIGIT+)? ;
-fragment DIGIT : [0-9] ;
+NUMBER : ( PLUS | MINUS )? (INT | FLOAT) ;
 PLUS: + ;
 MINUS: - ;
 ASTERISK: * ;
 SLASH: / ;
-MATH_OPERATOR: PLUS | MINUS | ASTERISK | SLASH;
+DOT: . ;
 EXCLAMATION: '!';
-NEWLINE: '\r'? '\n' ;
 
-WS : [ \t\r\n]+ -> skip ;  // Ignoruj białe znaki
+ID: [a-zA-Z_][a-zA-Z_0-9]* ;
+WS: [ \t\n\r\f]+ -> skip ;
