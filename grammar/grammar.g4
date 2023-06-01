@@ -33,11 +33,11 @@ mathExpr : NUMBER (MATH_OPERATOR NUMBER)*;
 
 additionExpr : mathExpr (PLUS mathExpr)* ;
 
-substractionExpr : mathExpr (('+' | '-') mathExpr)* ;
+substractionExpr : mathExpr (MINUS mathExpr)* ;
 
-multiplicationExpr : mathExpr (('*' | '/') mathExpr)* ;
+multiplicationExpr : mathExpr (ASTERISK mathExpr)* ;
 
-divisionExpr : mathExpr (('*' | '/') mathExpr)* ;
+divisionExpr : mathExpr (SLASH mathExpr)* ;
 
 unaryExpr : ('!' | '-')? primaryExpr ;
 
@@ -62,6 +62,11 @@ ID : [a-zA-Z]+ ;
 NUMBER : ('+' | '-')? DIGIT+ ('.' DIGIT+)? ;
 fragment DIGIT : [0-9] ;
 PLUS: + ;
+MINUS: - ;
+ASTERISK: * ;
+SLASH: / ;
 MATH_OPERATOR: PLUS | MINUS | ASTERISK | SLASH;
+EXCLAMATION: '!';
+NEWLINE: '\r'? '\n' ;
 
 WS : [ \t\r\n]+ -> skip ;  // Ignoruj białe znaki
