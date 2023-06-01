@@ -1,0 +1,14 @@
+int nazwa;
+float nazwa;
+string nazwa;
+nazwa = 5;
+read();
+print(x);
+x || 1;
+ab ^^ cx;
+arr.push();
+"string".length();
+x = 4 - (2 + 4) * 2 / 4;
+y = 5.4;
+arr = [];
+arr2 = [1,2,3];
