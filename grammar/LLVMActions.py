@@ -195,7 +195,7 @@ class LLVMActions(DallasListener):
                 if substraction is not None:
                     LLVMGenerator.sub_i32(v1.name, v2.name)
                 self.stack.push(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.INT))
-            if v1.type == VarType.REAL:
+            if v1.type == VarType.FLOAT:
                 if addition is not None:
                     LLVMGenerator.add_double(v1.name, v2.name)
                 if substraction is not None:
@@ -253,6 +253,10 @@ class LLVMActions(DallasListener):
 
     # Exit a parse tree produced by DallasParser#primaryExpression.
     def exitPrimaryExpression(self, ctx:DallasParser.PrimaryExpressionContext):
+        if ctx.INT() is not None:
+            self.stack.append(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.INT, 1))
+        if ctx.FLOAT() is not None:
+            self.stack.append(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.FLOAT, 1))
         pass
 
 

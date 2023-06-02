@@ -2,7 +2,7 @@ int nazwa;
 float nazwa;
 string nazwa;
 nazwa = 5;
-read("Hej");
+read();
 print(x);
 x || 1;
 ab ^^ cx;
