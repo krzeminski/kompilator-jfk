@@ -1,10 +1,12 @@
 grammar Dallas;
 
 // Reguły startowe
-start : statement+ EOF;
+prog : statement+ EOF;
 
 // Instrukcje
 statement : variableDeclaration
+          | printCall SEMI
+          | readCall SEMI
           | functionCall SEMI
           | functionCallOnObject SEMI
           | functionCallOnString SEMI
@@ -16,6 +18,10 @@ statement : variableDeclaration
 variableDeclaration : dataType ID SEMI ;
 
 // Wywołanie funkcji
+printCall : PRINT LPAREN expression RPAREN ;
+
+readCall : READ LPAREN expression RPAREN ;
+
 functionCall : ID LPAREN (expression (COMMA expression)*)? RPAREN ;
 
 functionCallOnObject : ID DOT functionCall ;
@@ -76,6 +82,9 @@ dataType : INT_KEY
     ;
 
 mathOperator: PLUS | MINUS | ASTERISK | SLASH;
+
+PRINT:	'print' ;
+READ:	'read' ;
 
 AND : '&&' ;
 OR : '||' ;

@@ -8,74 +8,11 @@ class LLVMGenerator:
     buffer = ""
 
     @staticmethod
-    def funkcjastart(id):
-        LLVMGenerator.main_text += LLVMGenerator.buffer
-        LLVMGenerator.main_tmp = LLVMGenerator.reg
-        LLVMGenerator.buffer = f"define i32 @{id}() nounwind {{\n"
-        LLVMGenerator.reg = 1
-
-    @staticmethod
-    def funkcjaend():
-        LLVMGenerator.buffer += f"ret i32 %{LLVMGenerator.reg-1}\n"
-        LLVMGenerator.buffer += "}\n"
-        LLVMGenerator.header_text += LLVMGenerator.buffer
-        LLVMGenerator.buffer = ""
-        LLVMGenerator.reg = LLVMGenerator.main_tmp
-
-    @staticmethod
     def icmp(id,value):
         LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i32, i32* {id}\n"
         LLVMGenerator.reg += 1
         LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = icmp eq i32 %{LLVMGenerator.reg-1},{value}\n"
         LLVMGenerator.reg += 1
-
-    @staticmethod
-    def ifstart():
-        LLVMGenerator.br += 1
-        LLVMGenerator.buffer += f"br i1 %{LLVMGenerator.reg-1}, label %true{LLVMGenerator.br}, label %false{LLVMGenerator.br}\n"
-        LLVMGenerator.buffer += f"true{LLVMGenerator.br}:\n"
-        LLVMGenerator.brstack.append(LLVMGenerator.br)
-
-    
-    @staticmethod
-    def ifend():
-        b =  LLVMGenerator.brstack.pop()
-        LLVMGenerator.buffer += f"br label %false{b}\n"
-        LLVMGenerator.buffer += f"false{b}:\n"
-
-    @staticmethod  
-    def repeatstart(repetitions):
-        LLVMGenerator.declare_i32(str(LLVMGenerator.reg), False)
-        counter = LLVMGenerator.reg
-        LLVMGenerator.reg += 1
-        LLVMGenerator.assign_i32(f"%{counter}", "0")
-        LLVMGenerator.br += 1
-        LLVMGenerator.buffer += f"br label %cond{LLVMGenerator.br}\n"
-        LLVMGenerator.buffer += f"cond{LLVMGenerator.br}:\n"
-
-        LLVMGenerator.load_i32(f"%{counter}")
-        LLVMGenerator.add_i32(f"%{LLVMGenerator.reg-1}", "1")
-        LLVMGenerator.assign_i32(f"%{counter}", f"%{LLVMGenerator.reg-1}")
-
-        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = icmp slt i32 %{LLVMGenerator.reg-2}, {repetitions}\n"
-        LLVMGenerator.reg += 1
-
-        LLVMGenerator.buffer += f"br i1 %{LLVMGenerator.reg-1}, label %true{LLVMGenerator.br}, label %false{LLVMGenerator.br}\n"
-        LLVMGenerator.buffer += f"true{LLVMGenerator.br}:\n"
-        LLVMGenerator.brstack.append(LLVMGenerator.br)
-    
-
-
-
-    @staticmethod
-    def repeatend():
-        b =  LLVMGenerator.brstack.pop()
-        LLVMGenerator.buffer += f"br label %cond{b}\n"
-        LLVMGenerator.buffer += f"false{b}:\n"
-   
-
-
-
 
     @staticmethod
     def printf_i32(id):
@@ -100,8 +37,6 @@ class LLVMGenerator:
     def scanf_double(id):
         LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strsd, i32 0, i32 0), double* {id})\n"
         LLVMGenerator.reg += 1
-
-
 
     @staticmethod
     def declare_i32(id,global_):

@@ -8,12 +8,12 @@ else:
 # This class defines a complete listener for a parse tree produced by DallasParser.
 class DallasListener(ParseTreeListener):
 
-    # Enter a parse tree produced by DallasParser#start.
-    def enterStart(self, ctx:DallasParser.StartContext):
+    # Enter a parse tree produced by DallasParser#prog.
+    def enterProg(self, ctx:DallasParser.ProgContext):
         pass
 
-    # Exit a parse tree produced by DallasParser#start.
-    def exitStart(self, ctx:DallasParser.StartContext):
+    # Exit a parse tree produced by DallasParser#prog.
+    def exitProg(self, ctx:DallasParser.ProgContext):
         pass
 
 
@@ -32,6 +32,24 @@ class DallasListener(ParseTreeListener):
 
     # Exit a parse tree produced by DallasParser#variableDeclaration.
     def exitVariableDeclaration(self, ctx:DallasParser.VariableDeclarationContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#printCall.
+    def enterPrintCall(self, ctx:DallasParser.PrintCallContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#printCall.
+    def exitPrintCall(self, ctx:DallasParser.PrintCallContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#readCall.
+    def enterReadCall(self, ctx:DallasParser.ReadCallContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#readCall.
+    def exitReadCall(self, ctx:DallasParser.ReadCallContext):
         pass
 
 

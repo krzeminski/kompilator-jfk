@@ -10,67 +10,74 @@ else:
 
 def serializedATN():
     return [
-        4,1,30,176,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
+        4,1,32,196,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
         6,2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,
-        2,14,7,14,1,0,4,0,32,8,0,11,0,12,0,33,1,0,1,0,1,1,1,1,1,1,1,1,1,
-        1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,52,8,1,1,2,1,2,1,2,1,2,
-        1,3,1,3,1,3,1,3,1,3,5,3,63,8,3,10,3,12,3,66,9,3,3,3,68,8,3,1,3,1,
-        3,1,4,1,4,1,4,1,4,1,5,1,5,1,5,1,5,1,6,1,6,1,6,1,6,5,6,84,8,6,10,
-        6,12,6,87,9,6,3,6,89,8,6,1,6,1,6,1,7,1,7,1,7,1,7,1,7,1,8,1,8,1,8,
-        1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,8,3,8,109,8,8,1,8,1,8,1,8,1,8,1,8,
-        1,8,1,8,1,8,1,8,1,8,1,8,1,8,5,8,123,8,8,10,8,12,8,126,9,8,1,9,1,
-        9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,5,9,137,8,9,10,9,12,9,140,9,9,1,10,
-        1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,10,5,10,151,8,10,10,10,12,10,
-        154,9,10,1,11,1,11,1,11,1,11,1,11,3,11,161,8,11,1,12,1,12,1,12,1,
-        12,1,12,1,12,1,12,3,12,170,8,12,1,13,1,13,1,14,1,14,1,14,0,3,16,
-        18,20,15,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,0,2,1,0,14,18,1,
-        0,22,25,191,0,31,1,0,0,0,2,51,1,0,0,0,4,53,1,0,0,0,6,57,1,0,0,0,
-        8,71,1,0,0,0,10,75,1,0,0,0,12,79,1,0,0,0,14,92,1,0,0,0,16,108,1,
-        0,0,0,18,127,1,0,0,0,20,141,1,0,0,0,22,160,1,0,0,0,24,169,1,0,0,
-        0,26,171,1,0,0,0,28,173,1,0,0,0,30,32,3,2,1,0,31,30,1,0,0,0,32,33,
-        1,0,0,0,33,31,1,0,0,0,33,34,1,0,0,0,34,35,1,0,0,0,35,36,5,0,0,1,
-        36,1,1,0,0,0,37,52,3,4,2,0,38,39,3,6,3,0,39,40,5,7,0,0,40,52,1,0,
-        0,0,41,42,3,8,4,0,42,43,5,7,0,0,43,52,1,0,0,0,44,45,3,10,5,0,45,
-        46,5,7,0,0,46,52,1,0,0,0,47,52,3,14,7,0,48,49,3,16,8,0,49,50,5,7,
-        0,0,50,52,1,0,0,0,51,37,1,0,0,0,51,38,1,0,0,0,51,41,1,0,0,0,51,44,
-        1,0,0,0,51,47,1,0,0,0,51,48,1,0,0,0,52,3,1,0,0,0,53,54,3,26,13,0,
-        54,55,5,29,0,0,55,56,5,7,0,0,56,5,1,0,0,0,57,58,5,29,0,0,58,67,5,
-        8,0,0,59,64,3,16,8,0,60,61,5,6,0,0,61,63,3,16,8,0,62,60,1,0,0,0,
-        63,66,1,0,0,0,64,62,1,0,0,0,64,65,1,0,0,0,65,68,1,0,0,0,66,64,1,
-        0,0,0,67,59,1,0,0,0,67,68,1,0,0,0,68,69,1,0,0,0,69,70,5,9,0,0,70,
-        7,1,0,0,0,71,72,5,29,0,0,72,73,5,26,0,0,73,74,3,6,3,0,74,9,1,0,0,
-        0,75,76,5,21,0,0,76,77,5,26,0,0,77,78,3,6,3,0,78,11,1,0,0,0,79,88,
-        5,12,0,0,80,85,3,16,8,0,81,82,5,6,0,0,82,84,3,16,8,0,83,81,1,0,0,
-        0,84,87,1,0,0,0,85,83,1,0,0,0,85,86,1,0,0,0,86,89,1,0,0,0,87,85,
-        1,0,0,0,88,80,1,0,0,0,88,89,1,0,0,0,89,90,1,0,0,0,90,91,5,13,0,0,
-        91,13,1,0,0,0,92,93,5,29,0,0,93,94,5,5,0,0,94,95,3,16,8,0,95,96,
-        5,7,0,0,96,15,1,0,0,0,97,98,6,8,-1,0,98,109,5,29,0,0,99,109,3,14,
-        7,0,100,109,3,6,3,0,101,102,5,27,0,0,102,109,3,16,8,6,103,109,3,
-        18,9,0,104,109,5,20,0,0,105,109,5,19,0,0,106,109,5,21,0,0,107,109,
-        3,12,6,0,108,97,1,0,0,0,108,99,1,0,0,0,108,100,1,0,0,0,108,101,1,
-        0,0,0,108,103,1,0,0,0,108,104,1,0,0,0,108,105,1,0,0,0,108,106,1,
-        0,0,0,108,107,1,0,0,0,109,124,1,0,0,0,110,111,10,10,0,0,111,112,
-        5,2,0,0,112,123,3,16,8,11,113,114,10,9,0,0,114,115,5,3,0,0,115,123,
-        3,16,8,10,116,117,10,8,0,0,117,118,5,1,0,0,118,123,3,16,8,9,119,
-        120,10,7,0,0,120,121,5,4,0,0,121,123,3,16,8,8,122,110,1,0,0,0,122,
-        113,1,0,0,0,122,116,1,0,0,0,122,119,1,0,0,0,123,126,1,0,0,0,124,
-        122,1,0,0,0,124,125,1,0,0,0,125,17,1,0,0,0,126,124,1,0,0,0,127,128,
-        6,9,-1,0,128,129,3,20,10,0,129,138,1,0,0,0,130,131,10,2,0,0,131,
-        132,5,22,0,0,132,137,3,20,10,0,133,134,10,1,0,0,134,135,5,23,0,0,
-        135,137,3,20,10,0,136,130,1,0,0,0,136,133,1,0,0,0,137,140,1,0,0,
-        0,138,136,1,0,0,0,138,139,1,0,0,0,139,19,1,0,0,0,140,138,1,0,0,0,
-        141,142,6,10,-1,0,142,143,3,22,11,0,143,152,1,0,0,0,144,145,10,2,
-        0,0,145,146,5,24,0,0,146,151,3,22,11,0,147,148,10,1,0,0,148,149,
-        5,25,0,0,149,151,3,22,11,0,150,144,1,0,0,0,150,147,1,0,0,0,151,154,
-        1,0,0,0,152,150,1,0,0,0,152,153,1,0,0,0,153,21,1,0,0,0,154,152,1,
-        0,0,0,155,161,3,24,12,0,156,157,5,22,0,0,157,161,3,22,11,0,158,159,
-        5,23,0,0,159,161,3,22,11,0,160,155,1,0,0,0,160,156,1,0,0,0,160,158,
-        1,0,0,0,161,23,1,0,0,0,162,170,5,20,0,0,163,170,5,19,0,0,164,165,
-        5,8,0,0,165,166,3,16,8,0,166,167,5,9,0,0,167,170,1,0,0,0,168,170,
-        5,29,0,0,169,162,1,0,0,0,169,163,1,0,0,0,169,164,1,0,0,0,169,168,
-        1,0,0,0,170,25,1,0,0,0,171,172,7,0,0,0,172,27,1,0,0,0,173,174,7,
-        1,0,0,174,29,1,0,0,0,15,33,51,64,67,85,88,108,122,124,136,138,150,
-        152,160,169
+        2,14,7,14,2,15,7,15,2,16,7,16,1,0,4,0,36,8,0,11,0,12,0,37,1,0,1,
+        0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,1,3,1,62,8,1,1,2,1,2,1,2,1,2,1,3,1,3,1,3,1,3,1,3,
+        1,4,1,4,1,4,1,4,1,4,1,5,1,5,1,5,1,5,1,5,5,5,83,8,5,10,5,12,5,86,
+        9,5,3,5,88,8,5,1,5,1,5,1,6,1,6,1,6,1,6,1,7,1,7,1,7,1,7,1,8,1,8,1,
+        8,1,8,5,8,104,8,8,10,8,12,8,107,9,8,3,8,109,8,8,1,8,1,8,1,9,1,9,
+        1,9,1,9,1,9,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,
+        10,3,10,129,8,10,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,10,1,
+        10,1,10,1,10,5,10,143,8,10,10,10,12,10,146,9,10,1,11,1,11,1,11,1,
+        11,1,11,1,11,1,11,1,11,1,11,5,11,157,8,11,10,11,12,11,160,9,11,1,
+        12,1,12,1,12,1,12,1,12,1,12,1,12,1,12,1,12,5,12,171,8,12,10,12,12,
+        12,174,9,12,1,13,1,13,1,13,1,13,1,13,3,13,181,8,13,1,14,1,14,1,14,
+        1,14,1,14,1,14,1,14,3,14,190,8,14,1,15,1,15,1,16,1,16,1,16,0,3,20,
+        22,24,17,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,0,2,1,0,16,
+        20,1,0,24,27,211,0,35,1,0,0,0,2,61,1,0,0,0,4,63,1,0,0,0,6,67,1,0,
+        0,0,8,72,1,0,0,0,10,77,1,0,0,0,12,91,1,0,0,0,14,95,1,0,0,0,16,99,
+        1,0,0,0,18,112,1,0,0,0,20,128,1,0,0,0,22,147,1,0,0,0,24,161,1,0,
+        0,0,26,180,1,0,0,0,28,189,1,0,0,0,30,191,1,0,0,0,32,193,1,0,0,0,
+        34,36,3,2,1,0,35,34,1,0,0,0,36,37,1,0,0,0,37,35,1,0,0,0,37,38,1,
+        0,0,0,38,39,1,0,0,0,39,40,5,0,0,1,40,1,1,0,0,0,41,62,3,4,2,0,42,
+        43,3,6,3,0,43,44,5,9,0,0,44,62,1,0,0,0,45,46,3,8,4,0,46,47,5,9,0,
+        0,47,62,1,0,0,0,48,49,3,10,5,0,49,50,5,9,0,0,50,62,1,0,0,0,51,52,
+        3,12,6,0,52,53,5,9,0,0,53,62,1,0,0,0,54,55,3,14,7,0,55,56,5,9,0,
+        0,56,62,1,0,0,0,57,62,3,18,9,0,58,59,3,20,10,0,59,60,5,9,0,0,60,
+        62,1,0,0,0,61,41,1,0,0,0,61,42,1,0,0,0,61,45,1,0,0,0,61,48,1,0,0,
+        0,61,51,1,0,0,0,61,54,1,0,0,0,61,57,1,0,0,0,61,58,1,0,0,0,62,3,1,
+        0,0,0,63,64,3,30,15,0,64,65,5,31,0,0,65,66,5,9,0,0,66,5,1,0,0,0,
+        67,68,5,1,0,0,68,69,5,10,0,0,69,70,3,20,10,0,70,71,5,11,0,0,71,7,
+        1,0,0,0,72,73,5,2,0,0,73,74,5,10,0,0,74,75,3,20,10,0,75,76,5,11,
+        0,0,76,9,1,0,0,0,77,78,5,31,0,0,78,87,5,10,0,0,79,84,3,20,10,0,80,
+        81,5,8,0,0,81,83,3,20,10,0,82,80,1,0,0,0,83,86,1,0,0,0,84,82,1,0,
+        0,0,84,85,1,0,0,0,85,88,1,0,0,0,86,84,1,0,0,0,87,79,1,0,0,0,87,88,
+        1,0,0,0,88,89,1,0,0,0,89,90,5,11,0,0,90,11,1,0,0,0,91,92,5,31,0,
+        0,92,93,5,28,0,0,93,94,3,10,5,0,94,13,1,0,0,0,95,96,5,23,0,0,96,
+        97,5,28,0,0,97,98,3,10,5,0,98,15,1,0,0,0,99,108,5,14,0,0,100,105,
+        3,20,10,0,101,102,5,8,0,0,102,104,3,20,10,0,103,101,1,0,0,0,104,
+        107,1,0,0,0,105,103,1,0,0,0,105,106,1,0,0,0,106,109,1,0,0,0,107,
+        105,1,0,0,0,108,100,1,0,0,0,108,109,1,0,0,0,109,110,1,0,0,0,110,
+        111,5,15,0,0,111,17,1,0,0,0,112,113,5,31,0,0,113,114,5,7,0,0,114,
+        115,3,20,10,0,115,116,5,9,0,0,116,19,1,0,0,0,117,118,6,10,-1,0,118,
+        129,5,31,0,0,119,129,3,18,9,0,120,129,3,10,5,0,121,122,5,29,0,0,
+        122,129,3,20,10,6,123,129,3,22,11,0,124,129,5,22,0,0,125,129,5,21,
+        0,0,126,129,5,23,0,0,127,129,3,16,8,0,128,117,1,0,0,0,128,119,1,
+        0,0,0,128,120,1,0,0,0,128,121,1,0,0,0,128,123,1,0,0,0,128,124,1,
+        0,0,0,128,125,1,0,0,0,128,126,1,0,0,0,128,127,1,0,0,0,129,144,1,
+        0,0,0,130,131,10,10,0,0,131,132,5,4,0,0,132,143,3,20,10,11,133,134,
+        10,9,0,0,134,135,5,5,0,0,135,143,3,20,10,10,136,137,10,8,0,0,137,
+        138,5,3,0,0,138,143,3,20,10,9,139,140,10,7,0,0,140,141,5,6,0,0,141,
+        143,3,20,10,8,142,130,1,0,0,0,142,133,1,0,0,0,142,136,1,0,0,0,142,
+        139,1,0,0,0,143,146,1,0,0,0,144,142,1,0,0,0,144,145,1,0,0,0,145,
+        21,1,0,0,0,146,144,1,0,0,0,147,148,6,11,-1,0,148,149,3,24,12,0,149,
+        158,1,0,0,0,150,151,10,2,0,0,151,152,5,24,0,0,152,157,3,24,12,0,
+        153,154,10,1,0,0,154,155,5,25,0,0,155,157,3,24,12,0,156,150,1,0,
+        0,0,156,153,1,0,0,0,157,160,1,0,0,0,158,156,1,0,0,0,158,159,1,0,
+        0,0,159,23,1,0,0,0,160,158,1,0,0,0,161,162,6,12,-1,0,162,163,3,26,
+        13,0,163,172,1,0,0,0,164,165,10,2,0,0,165,166,5,26,0,0,166,171,3,
+        26,13,0,167,168,10,1,0,0,168,169,5,27,0,0,169,171,3,26,13,0,170,
+        164,1,0,0,0,170,167,1,0,0,0,171,174,1,0,0,0,172,170,1,0,0,0,172,
+        173,1,0,0,0,173,25,1,0,0,0,174,172,1,0,0,0,175,181,3,28,14,0,176,
+        177,5,24,0,0,177,181,3,26,13,0,178,179,5,25,0,0,179,181,3,26,13,
+        0,180,175,1,0,0,0,180,176,1,0,0,0,180,178,1,0,0,0,181,27,1,0,0,0,
+        182,190,5,22,0,0,183,190,5,21,0,0,184,185,5,10,0,0,185,186,3,20,
+        10,0,186,187,5,11,0,0,187,190,1,0,0,0,188,190,5,31,0,0,189,182,1,
+        0,0,0,189,183,1,0,0,0,189,184,1,0,0,0,189,188,1,0,0,0,190,29,1,0,
+        0,0,191,192,7,0,0,0,192,31,1,0,0,0,193,194,7,1,0,0,194,33,1,0,0,
+        0,15,37,61,84,87,105,108,128,142,144,156,158,170,172,180,189
     ]
 
 class DallasParser ( Parser ):
@@ -83,71 +90,76 @@ class DallasParser ( Parser ):
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [ "<INVALID>", "'&&'", "'||'", "'^^'", "'=='", "'='", 
-                     "','", "';'", "'('", "')'", "'{'", "'}'", "'['", "']'", 
-                     "'int'", "'float'", "'float32'", "'float64'", "'string'", 
-                     "<INVALID>", "<INVALID>", "<INVALID>", "'+'", "'-'", 
-                     "'*'", "'/'", "'.'", "'!'", "'\"'" ]
+    literalNames = [ "<INVALID>", "'print'", "'read'", "'&&'", "'||'", "'^^'", 
+                     "'=='", "'='", "','", "';'", "'('", "')'", "'{'", "'}'", 
+                     "'['", "']'", "'int'", "'float'", "'float32'", "'float64'", 
+                     "'string'", "<INVALID>", "<INVALID>", "<INVALID>", 
+                     "'+'", "'-'", "'*'", "'/'", "'.'", "'!'", "'\"'" ]
 
-    symbolicNames = [ "<INVALID>", "AND", "OR", "XOR", "EQ", "ASSIGN", "COMMA", 
-                      "SEMI", "LPAREN", "RPAREN", "LCURLY", "RCURLY", "LBRACK", 
-                      "RBRACK", "INT_KEY", "FLOAT_KEY", "FLOAT_32_KEY", 
-                      "FLOAT_64_KEY", "STRING_KEY", "FLOAT", "INT", "STRING", 
-                      "PLUS", "MINUS", "ASTERISK", "SLASH", "DOT", "EXCLAMATION", 
-                      "DQ", "ID", "WS" ]
+    symbolicNames = [ "<INVALID>", "PRINT", "READ", "AND", "OR", "XOR", 
+                      "EQ", "ASSIGN", "COMMA", "SEMI", "LPAREN", "RPAREN", 
+                      "LCURLY", "RCURLY", "LBRACK", "RBRACK", "INT_KEY", 
+                      "FLOAT_KEY", "FLOAT_32_KEY", "FLOAT_64_KEY", "STRING_KEY", 
+                      "FLOAT", "INT", "STRING", "PLUS", "MINUS", "ASTERISK", 
+                      "SLASH", "DOT", "EXCLAMATION", "DQ", "ID", "WS" ]
 
-    RULE_start = 0
+    RULE_prog = 0
     RULE_statement = 1
     RULE_variableDeclaration = 2
-    RULE_functionCall = 3
-    RULE_functionCallOnObject = 4
-    RULE_functionCallOnString = 5
-    RULE_array = 6
-    RULE_assignment = 7
-    RULE_expression = 8
-    RULE_additiveExpression = 9
-    RULE_multiplicativeExpression = 10
-    RULE_unaryExpression = 11
-    RULE_primaryExpression = 12
-    RULE_dataType = 13
-    RULE_mathOperator = 14
+    RULE_printCall = 3
+    RULE_readCall = 4
+    RULE_functionCall = 5
+    RULE_functionCallOnObject = 6
+    RULE_functionCallOnString = 7
+    RULE_array = 8
+    RULE_assignment = 9
+    RULE_expression = 10
+    RULE_additiveExpression = 11
+    RULE_multiplicativeExpression = 12
+    RULE_unaryExpression = 13
+    RULE_primaryExpression = 14
+    RULE_dataType = 15
+    RULE_mathOperator = 16
 
-    ruleNames =  [ "start", "statement", "variableDeclaration", "functionCall", 
-                   "functionCallOnObject", "functionCallOnString", "array", 
-                   "assignment", "expression", "additiveExpression", "multiplicativeExpression", 
-                   "unaryExpression", "primaryExpression", "dataType", "mathOperator" ]
+    ruleNames =  [ "prog", "statement", "variableDeclaration", "printCall", 
+                   "readCall", "functionCall", "functionCallOnObject", "functionCallOnString", 
+                   "array", "assignment", "expression", "additiveExpression", 
+                   "multiplicativeExpression", "unaryExpression", "primaryExpression", 
+                   "dataType", "mathOperator" ]
 
     EOF = Token.EOF
-    AND=1
-    OR=2
-    XOR=3
-    EQ=4
-    ASSIGN=5
-    COMMA=6
-    SEMI=7
-    LPAREN=8
-    RPAREN=9
-    LCURLY=10
-    RCURLY=11
-    LBRACK=12
-    RBRACK=13
-    INT_KEY=14
-    FLOAT_KEY=15
-    FLOAT_32_KEY=16
-    FLOAT_64_KEY=17
-    STRING_KEY=18
-    FLOAT=19
-    INT=20
-    STRING=21
-    PLUS=22
-    MINUS=23
-    ASTERISK=24
-    SLASH=25
-    DOT=26
-    EXCLAMATION=27
-    DQ=28
-    ID=29
-    WS=30
+    PRINT=1
+    READ=2
+    AND=3
+    OR=4
+    XOR=5
+    EQ=6
+    ASSIGN=7
+    COMMA=8
+    SEMI=9
+    LPAREN=10
+    RPAREN=11
+    LCURLY=12
+    RCURLY=13
+    LBRACK=14
+    RBRACK=15
+    INT_KEY=16
+    FLOAT_KEY=17
+    FLOAT_32_KEY=18
+    FLOAT_64_KEY=19
+    STRING_KEY=20
+    FLOAT=21
+    INT=22
+    STRING=23
+    PLUS=24
+    MINUS=25
+    ASTERISK=26
+    SLASH=27
+    DOT=28
+    EXCLAMATION=29
+    DQ=30
+    ID=31
+    WS=32
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -158,7 +170,7 @@ class DallasParser ( Parser ):
 
 
 
-    class StartContext(ParserRuleContext):
+    class ProgContext(ParserRuleContext):
         __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -176,39 +188,39 @@ class DallasParser ( Parser ):
 
 
         def getRuleIndex(self):
-            return DallasParser.RULE_start
+            return DallasParser.RULE_prog
 
         def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterStart" ):
-                listener.enterStart(self)
+            if hasattr( listener, "enterProg" ):
+                listener.enterProg(self)
 
         def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitStart" ):
-                listener.exitStart(self)
+            if hasattr( listener, "exitProg" ):
+                listener.exitProg(self)
 
 
 
 
-    def start(self):
+    def prog(self):
 
-        localctx = DallasParser.StartContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 0, self.RULE_start)
+        localctx = DallasParser.ProgContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 0, self.RULE_prog)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 31 
+            self.state = 35 
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
-                self.state = 30
+                self.state = 34
                 self.statement()
-                self.state = 33 
+                self.state = 37 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & 687853824) != 0)):
+                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & 2751415302) != 0)):
                     break
 
-            self.state = 35
+            self.state = 39
             self.match(DallasParser.EOF)
         except RecognitionException as re:
             localctx.exception = re
@@ -230,12 +242,20 @@ class DallasParser ( Parser ):
             return self.getTypedRuleContext(DallasParser.VariableDeclarationContext,0)
 
 
-        def functionCall(self):
-            return self.getTypedRuleContext(DallasParser.FunctionCallContext,0)
+        def printCall(self):
+            return self.getTypedRuleContext(DallasParser.PrintCallContext,0)
 
 
         def SEMI(self):
             return self.getToken(DallasParser.SEMI, 0)
+
+        def readCall(self):
+            return self.getTypedRuleContext(DallasParser.ReadCallContext,0)
+
+
+        def functionCall(self):
+            return self.getTypedRuleContext(DallasParser.FunctionCallContext,0)
+
 
         def functionCallOnObject(self):
             return self.getTypedRuleContext(DallasParser.FunctionCallOnObjectContext,0)
@@ -272,50 +292,66 @@ class DallasParser ( Parser ):
         localctx = DallasParser.StatementContext(self, self._ctx, self.state)
         self.enterRule(localctx, 2, self.RULE_statement)
         try:
-            self.state = 51
+            self.state = 61
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,1,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 37
+                self.state = 41
                 self.variableDeclaration()
                 pass
 
             elif la_ == 2:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 38
-                self.functionCall()
-                self.state = 39
+                self.state = 42
+                self.printCall()
+                self.state = 43
                 self.match(DallasParser.SEMI)
                 pass
 
             elif la_ == 3:
                 self.enterOuterAlt(localctx, 3)
-                self.state = 41
-                self.functionCallOnObject()
-                self.state = 42
+                self.state = 45
+                self.readCall()
+                self.state = 46
                 self.match(DallasParser.SEMI)
                 pass
 
             elif la_ == 4:
                 self.enterOuterAlt(localctx, 4)
-                self.state = 44
-                self.functionCallOnString()
-                self.state = 45
+                self.state = 48
+                self.functionCall()
+                self.state = 49
                 self.match(DallasParser.SEMI)
                 pass
 
             elif la_ == 5:
                 self.enterOuterAlt(localctx, 5)
-                self.state = 47
-                self.assignment()
+                self.state = 51
+                self.functionCallOnObject()
+                self.state = 52
+                self.match(DallasParser.SEMI)
                 pass
 
             elif la_ == 6:
                 self.enterOuterAlt(localctx, 6)
-                self.state = 48
+                self.state = 54
+                self.functionCallOnString()
+                self.state = 55
+                self.match(DallasParser.SEMI)
+                pass
+
+            elif la_ == 7:
+                self.enterOuterAlt(localctx, 7)
+                self.state = 57
+                self.assignment()
+                pass
+
+            elif la_ == 8:
+                self.enterOuterAlt(localctx, 8)
+                self.state = 58
                 self.expression(0)
-                self.state = 49
+                self.state = 59
                 self.match(DallasParser.SEMI)
                 pass
 
@@ -366,12 +402,126 @@ class DallasParser ( Parser ):
         self.enterRule(localctx, 4, self.RULE_variableDeclaration)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 53
+            self.state = 63
             self.dataType()
-            self.state = 54
+            self.state = 64
             self.match(DallasParser.ID)
-            self.state = 55
+            self.state = 65
             self.match(DallasParser.SEMI)
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.exitRule()
+        return localctx
+
+
+    class PrintCallContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+        def PRINT(self):
+            return self.getToken(DallasParser.PRINT, 0)
+
+        def LPAREN(self):
+            return self.getToken(DallasParser.LPAREN, 0)
+
+        def expression(self):
+            return self.getTypedRuleContext(DallasParser.ExpressionContext,0)
+
+
+        def RPAREN(self):
+            return self.getToken(DallasParser.RPAREN, 0)
+
+        def getRuleIndex(self):
+            return DallasParser.RULE_printCall
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterPrintCall" ):
+                listener.enterPrintCall(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitPrintCall" ):
+                listener.exitPrintCall(self)
+
+
+
+
+    def printCall(self):
+
+        localctx = DallasParser.PrintCallContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 6, self.RULE_printCall)
+        try:
+            self.enterOuterAlt(localctx, 1)
+            self.state = 67
+            self.match(DallasParser.PRINT)
+            self.state = 68
+            self.match(DallasParser.LPAREN)
+            self.state = 69
+            self.expression(0)
+            self.state = 70
+            self.match(DallasParser.RPAREN)
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.exitRule()
+        return localctx
+
+
+    class ReadCallContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+        def READ(self):
+            return self.getToken(DallasParser.READ, 0)
+
+        def LPAREN(self):
+            return self.getToken(DallasParser.LPAREN, 0)
+
+        def expression(self):
+            return self.getTypedRuleContext(DallasParser.ExpressionContext,0)
+
+
+        def RPAREN(self):
+            return self.getToken(DallasParser.RPAREN, 0)
+
+        def getRuleIndex(self):
+            return DallasParser.RULE_readCall
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterReadCall" ):
+                listener.enterReadCall(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitReadCall" ):
+                listener.exitReadCall(self)
+
+
+
+
+    def readCall(self):
+
+        localctx = DallasParser.ReadCallContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 8, self.RULE_readCall)
+        try:
+            self.enterOuterAlt(localctx, 1)
+            self.state = 72
+            self.match(DallasParser.READ)
+            self.state = 73
+            self.match(DallasParser.LPAREN)
+            self.state = 74
+            self.expression(0)
+            self.state = 75
+            self.match(DallasParser.RPAREN)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -427,35 +577,35 @@ class DallasParser ( Parser ):
     def functionCall(self):
 
         localctx = DallasParser.FunctionCallContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 6, self.RULE_functionCall)
+        self.enterRule(localctx, 10, self.RULE_functionCall)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 57
+            self.state = 77
             self.match(DallasParser.ID)
-            self.state = 58
+            self.state = 78
             self.match(DallasParser.LPAREN)
-            self.state = 67
+            self.state = 87
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & 687345920) != 0):
-                self.state = 59
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & 2749383680) != 0):
+                self.state = 79
                 self.expression(0)
-                self.state = 64
+                self.state = 84
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while _la==6:
-                    self.state = 60
+                while _la==8:
+                    self.state = 80
                     self.match(DallasParser.COMMA)
-                    self.state = 61
+                    self.state = 81
                     self.expression(0)
-                    self.state = 66
+                    self.state = 86
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
 
 
 
-            self.state = 69
+            self.state = 89
             self.match(DallasParser.RPAREN)
         except RecognitionException as re:
             localctx.exception = re
@@ -500,14 +650,14 @@ class DallasParser ( Parser ):
     def functionCallOnObject(self):
 
         localctx = DallasParser.FunctionCallOnObjectContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 8, self.RULE_functionCallOnObject)
+        self.enterRule(localctx, 12, self.RULE_functionCallOnObject)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 71
+            self.state = 91
             self.match(DallasParser.ID)
-            self.state = 72
+            self.state = 92
             self.match(DallasParser.DOT)
-            self.state = 73
+            self.state = 93
             self.functionCall()
         except RecognitionException as re:
             localctx.exception = re
@@ -552,14 +702,14 @@ class DallasParser ( Parser ):
     def functionCallOnString(self):
 
         localctx = DallasParser.FunctionCallOnStringContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 10, self.RULE_functionCallOnString)
+        self.enterRule(localctx, 14, self.RULE_functionCallOnString)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 75
+            self.state = 95
             self.match(DallasParser.STRING)
-            self.state = 76
+            self.state = 96
             self.match(DallasParser.DOT)
-            self.state = 77
+            self.state = 97
             self.functionCall()
         except RecognitionException as re:
             localctx.exception = re
@@ -613,33 +763,33 @@ class DallasParser ( Parser ):
     def array(self):
 
         localctx = DallasParser.ArrayContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 12, self.RULE_array)
+        self.enterRule(localctx, 16, self.RULE_array)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 79
+            self.state = 99
             self.match(DallasParser.LBRACK)
-            self.state = 88
+            self.state = 108
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & 687345920) != 0):
-                self.state = 80
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & 2749383680) != 0):
+                self.state = 100
                 self.expression(0)
-                self.state = 85
+                self.state = 105
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while _la==6:
-                    self.state = 81
+                while _la==8:
+                    self.state = 101
                     self.match(DallasParser.COMMA)
-                    self.state = 82
+                    self.state = 102
                     self.expression(0)
-                    self.state = 87
+                    self.state = 107
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
 
 
 
-            self.state = 90
+            self.state = 110
             self.match(DallasParser.RBRACK)
         except RecognitionException as re:
             localctx.exception = re
@@ -687,16 +837,16 @@ class DallasParser ( Parser ):
     def assignment(self):
 
         localctx = DallasParser.AssignmentContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 14, self.RULE_assignment)
+        self.enterRule(localctx, 18, self.RULE_assignment)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 92
+            self.state = 112
             self.match(DallasParser.ID)
-            self.state = 93
+            self.state = 113
             self.match(DallasParser.ASSIGN)
-            self.state = 94
+            self.state = 114
             self.expression(0)
-            self.state = 95
+            self.state = 115
             self.match(DallasParser.SEMI)
         except RecognitionException as re:
             localctx.exception = re
@@ -782,63 +932,63 @@ class DallasParser ( Parser ):
         _parentState = self.state
         localctx = DallasParser.ExpressionContext(self, self._ctx, _parentState)
         _prevctx = localctx
-        _startState = 16
-        self.enterRecursionRule(localctx, 16, self.RULE_expression, _p)
+        _startState = 20
+        self.enterRecursionRule(localctx, 20, self.RULE_expression, _p)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 108
+            self.state = 128
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,6,self._ctx)
             if la_ == 1:
-                self.state = 98
+                self.state = 118
                 self.match(DallasParser.ID)
                 pass
 
             elif la_ == 2:
-                self.state = 99
+                self.state = 119
                 self.assignment()
                 pass
 
             elif la_ == 3:
-                self.state = 100
+                self.state = 120
                 self.functionCall()
                 pass
 
             elif la_ == 4:
-                self.state = 101
+                self.state = 121
                 self.match(DallasParser.EXCLAMATION)
-                self.state = 102
+                self.state = 122
                 self.expression(6)
                 pass
 
             elif la_ == 5:
-                self.state = 103
+                self.state = 123
                 self.additiveExpression(0)
                 pass
 
             elif la_ == 6:
-                self.state = 104
+                self.state = 124
                 self.match(DallasParser.INT)
                 pass
 
             elif la_ == 7:
-                self.state = 105
+                self.state = 125
                 self.match(DallasParser.FLOAT)
                 pass
 
             elif la_ == 8:
-                self.state = 106
+                self.state = 126
                 self.match(DallasParser.STRING)
                 pass
 
             elif la_ == 9:
-                self.state = 107
+                self.state = 127
                 self.array()
                 pass
 
 
             self._ctx.stop = self._input.LT(-1)
-            self.state = 124
+            self.state = 144
             self._errHandler.sync(self)
             _alt = self._interp.adaptivePredict(self._input,8,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
@@ -846,63 +996,63 @@ class DallasParser ( Parser ):
                     if self._parseListeners is not None:
                         self.triggerExitRuleEvent()
                     _prevctx = localctx
-                    self.state = 122
+                    self.state = 142
                     self._errHandler.sync(self)
                     la_ = self._interp.adaptivePredict(self._input,7,self._ctx)
                     if la_ == 1:
                         localctx = DallasParser.ExpressionContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 110
+                        self.state = 130
                         if not self.precpred(self._ctx, 10):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 10)")
-                        self.state = 111
+                        self.state = 131
                         self.match(DallasParser.OR)
-                        self.state = 112
+                        self.state = 132
                         self.expression(11)
                         pass
 
                     elif la_ == 2:
                         localctx = DallasParser.ExpressionContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 113
+                        self.state = 133
                         if not self.precpred(self._ctx, 9):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 9)")
-                        self.state = 114
+                        self.state = 134
                         self.match(DallasParser.XOR)
-                        self.state = 115
+                        self.state = 135
                         self.expression(10)
                         pass
 
                     elif la_ == 3:
                         localctx = DallasParser.ExpressionContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 116
+                        self.state = 136
                         if not self.precpred(self._ctx, 8):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 8)")
-                        self.state = 117
+                        self.state = 137
                         self.match(DallasParser.AND)
-                        self.state = 118
+                        self.state = 138
                         self.expression(9)
                         pass
 
                     elif la_ == 4:
                         localctx = DallasParser.ExpressionContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 119
+                        self.state = 139
                         if not self.precpred(self._ctx, 7):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 7)")
-                        self.state = 120
+                        self.state = 140
                         self.match(DallasParser.EQ)
-                        self.state = 121
+                        self.state = 141
                         self.expression(8)
                         pass
 
              
-                self.state = 126
+                self.state = 146
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,8,self._ctx)
 
@@ -954,14 +1104,14 @@ class DallasParser ( Parser ):
         _parentState = self.state
         localctx = DallasParser.AdditiveExpressionContext(self, self._ctx, _parentState)
         _prevctx = localctx
-        _startState = 18
-        self.enterRecursionRule(localctx, 18, self.RULE_additiveExpression, _p)
+        _startState = 22
+        self.enterRecursionRule(localctx, 22, self.RULE_additiveExpression, _p)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 128
+            self.state = 148
             self.multiplicativeExpression(0)
             self._ctx.stop = self._input.LT(-1)
-            self.state = 138
+            self.state = 158
             self._errHandler.sync(self)
             _alt = self._interp.adaptivePredict(self._input,10,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
@@ -969,37 +1119,37 @@ class DallasParser ( Parser ):
                     if self._parseListeners is not None:
                         self.triggerExitRuleEvent()
                     _prevctx = localctx
-                    self.state = 136
+                    self.state = 156
                     self._errHandler.sync(self)
                     la_ = self._interp.adaptivePredict(self._input,9,self._ctx)
                     if la_ == 1:
                         localctx = DallasParser.AdditiveExpressionContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_additiveExpression)
-                        self.state = 130
+                        self.state = 150
                         if not self.precpred(self._ctx, 2):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 2)")
-                        self.state = 131
+                        self.state = 151
                         self.match(DallasParser.PLUS)
-                        self.state = 132
+                        self.state = 152
                         self.multiplicativeExpression(0)
                         pass
 
                     elif la_ == 2:
                         localctx = DallasParser.AdditiveExpressionContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_additiveExpression)
-                        self.state = 133
+                        self.state = 153
                         if not self.precpred(self._ctx, 1):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 1)")
-                        self.state = 134
+                        self.state = 154
                         self.match(DallasParser.MINUS)
-                        self.state = 135
+                        self.state = 155
                         self.multiplicativeExpression(0)
                         pass
 
              
-                self.state = 140
+                self.state = 160
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,10,self._ctx)
 
@@ -1051,14 +1201,14 @@ class DallasParser ( Parser ):
         _parentState = self.state
         localctx = DallasParser.MultiplicativeExpressionContext(self, self._ctx, _parentState)
         _prevctx = localctx
-        _startState = 20
-        self.enterRecursionRule(localctx, 20, self.RULE_multiplicativeExpression, _p)
+        _startState = 24
+        self.enterRecursionRule(localctx, 24, self.RULE_multiplicativeExpression, _p)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 142
+            self.state = 162
             self.unaryExpression()
             self._ctx.stop = self._input.LT(-1)
-            self.state = 152
+            self.state = 172
             self._errHandler.sync(self)
             _alt = self._interp.adaptivePredict(self._input,12,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
@@ -1066,37 +1216,37 @@ class DallasParser ( Parser ):
                     if self._parseListeners is not None:
                         self.triggerExitRuleEvent()
                     _prevctx = localctx
-                    self.state = 150
+                    self.state = 170
                     self._errHandler.sync(self)
                     la_ = self._interp.adaptivePredict(self._input,11,self._ctx)
                     if la_ == 1:
                         localctx = DallasParser.MultiplicativeExpressionContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_multiplicativeExpression)
-                        self.state = 144
+                        self.state = 164
                         if not self.precpred(self._ctx, 2):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 2)")
-                        self.state = 145
+                        self.state = 165
                         self.match(DallasParser.ASTERISK)
-                        self.state = 146
+                        self.state = 166
                         self.unaryExpression()
                         pass
 
                     elif la_ == 2:
                         localctx = DallasParser.MultiplicativeExpressionContext(self, _parentctx, _parentState)
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_multiplicativeExpression)
-                        self.state = 147
+                        self.state = 167
                         if not self.precpred(self._ctx, 1):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 1)")
-                        self.state = 148
+                        self.state = 168
                         self.match(DallasParser.SLASH)
-                        self.state = 149
+                        self.state = 169
                         self.unaryExpression()
                         pass
 
              
-                self.state = 154
+                self.state = 174
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,12,self._ctx)
 
@@ -1147,28 +1297,28 @@ class DallasParser ( Parser ):
     def unaryExpression(self):
 
         localctx = DallasParser.UnaryExpressionContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 22, self.RULE_unaryExpression)
+        self.enterRule(localctx, 26, self.RULE_unaryExpression)
         try:
-            self.state = 160
+            self.state = 180
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [8, 19, 20, 29]:
+            if token in [10, 21, 22, 31]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 155
+                self.state = 175
                 self.primaryExpression()
                 pass
-            elif token in [22]:
+            elif token in [24]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 156
+                self.state = 176
                 self.match(DallasParser.PLUS)
-                self.state = 157
+                self.state = 177
                 self.unaryExpression()
                 pass
-            elif token in [23]:
+            elif token in [25]:
                 self.enterOuterAlt(localctx, 3)
-                self.state = 158
+                self.state = 178
                 self.match(DallasParser.MINUS)
-                self.state = 159
+                self.state = 179
                 self.unaryExpression()
                 pass
             else:
@@ -1226,33 +1376,33 @@ class DallasParser ( Parser ):
     def primaryExpression(self):
 
         localctx = DallasParser.PrimaryExpressionContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 24, self.RULE_primaryExpression)
+        self.enterRule(localctx, 28, self.RULE_primaryExpression)
         try:
-            self.state = 169
+            self.state = 189
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [20]:
+            if token in [22]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 162
+                self.state = 182
                 self.match(DallasParser.INT)
                 pass
-            elif token in [19]:
+            elif token in [21]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 163
+                self.state = 183
                 self.match(DallasParser.FLOAT)
                 pass
-            elif token in [8]:
+            elif token in [10]:
                 self.enterOuterAlt(localctx, 3)
-                self.state = 164
+                self.state = 184
                 self.match(DallasParser.LPAREN)
-                self.state = 165
+                self.state = 185
                 self.expression(0)
-                self.state = 166
+                self.state = 186
                 self.match(DallasParser.RPAREN)
                 pass
-            elif token in [29]:
+            elif token in [31]:
                 self.enterOuterAlt(localctx, 4)
-                self.state = 168
+                self.state = 188
                 self.match(DallasParser.ID)
                 pass
             else:
@@ -1306,13 +1456,13 @@ class DallasParser ( Parser ):
     def dataType(self):
 
         localctx = DallasParser.DataTypeContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 26, self.RULE_dataType)
+        self.enterRule(localctx, 30, self.RULE_dataType)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 171
+            self.state = 191
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 507904) != 0)):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 2031616) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1362,13 +1512,13 @@ class DallasParser ( Parser ):
     def mathOperator(self):
 
         localctx = DallasParser.MathOperatorContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 28, self.RULE_mathOperator)
+        self.enterRule(localctx, 32, self.RULE_mathOperator)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 173
+            self.state = 193
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 62914560) != 0)):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 251658240) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1386,9 +1536,9 @@ class DallasParser ( Parser ):
     def sempred(self, localctx:RuleContext, ruleIndex:int, predIndex:int):
         if self._predicates == None:
             self._predicates = dict()
-        self._predicates[8] = self.expression_sempred
-        self._predicates[9] = self.additiveExpression_sempred
-        self._predicates[10] = self.multiplicativeExpression_sempred
+        self._predicates[10] = self.expression_sempred
+        self._predicates[11] = self.additiveExpression_sempred
+        self._predicates[12] = self.multiplicativeExpression_sempred
         pred = self._predicates.get(ruleIndex, None)
         if pred is None:
             raise Exception("No predicate with index:" + str(ruleIndex))

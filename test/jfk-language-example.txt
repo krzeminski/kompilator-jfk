@@ -2,6 +2,7 @@
 
 int nazwa;
 float nazwa;
+string nazwa;
 
 read();
 print(x);
