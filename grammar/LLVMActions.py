@@ -1,6 +1,10 @@
 import enum
 from collections import deque
 
+from LLVMGenerator import LLVMGenerator
+from DallasListener import DallasListener
+from DallasParser import DallasParser
+
 class VarType(enum.Enum):
     ID = 1
     INT = 2
@@ -17,11 +21,8 @@ class Value:
 
 class LLVMActions(DallasListener):
     def __init__(self):
-        self.global_vars = {}
         self.local_vars = {}
-        self.functions = set()
         self.stack = deque()
-        self.function = None
         self.global_ = None
 
 
@@ -50,16 +51,19 @@ class LLVMActions(DallasListener):
 
     # Exit a parse tree produced by DallasParser#variableDeclaration.
     def exitVariableDeclaration(self, ctx:DallasParser.VariableDeclarationContext):
-        if v.type == VarType.INT:
+        ID = ctx.ID().getText()
+        if ctx.dataType().INT_KEY() is not None:
             LLVMGenerator.declare_i32(ID);
-        if v.type == VarType.FLOAT:
+            self.stack.append(Value("%" + str(LLVMGenerator.main_tmp - 1), VarType.ID, 1))
+        if ctx.dataType().FLOAT_KEY() is not None:
             LLVMGenerator.declare_double(ID);
-        if v.type == VarType.STRING:
+            self.stack.append(Value("%" + str(LLVMGenerator.main_tmp - 1), VarType.ID, 1))
+        if ctx.dataType().STRING_KEY() is not None:
             LLVMGenerator.declare_string(ID);
-        if v.type == VarType.ARRAY:
+            self.stack.append(Value("%" + str(LLVMGenerator.main_tmp - 1), VarType.ID, 64))
+        if ctx.dataType().ARRAY_KEY() is not None:
             LLVMGenerator.declare_array(ID);
-        if v.type == VarType.UNKNOWN:
-            self.error(ctx.getStart().getLine(), "unknown variable " + ID)
+            self.stack.append(Value("%" + str(LLVMGenerator.main_tmp - 1), VarType.ID, 64))
 
 
     # Enter a parse tree produced by DallasParser#printCall.
@@ -69,10 +73,7 @@ class LLVMActions(DallasListener):
     # Exit a parse tree produced by DallasParser#printCall.
     def exitPrintCall(self, ctx:DallasParser.PrintCallContext):
         ID = ctx.ID().getText()
-        if global:
-            type = global_vars.get(ID)
-        else:
-            type = local_vars.get(ID)
+        type = local_vars.get(ID)
         if type is not None:
             if type == VarType.INT:
                 LLVMGenerator.printf_i32(set_variable(ID, type))
@@ -163,10 +164,8 @@ class LLVMActions(DallasListener):
             if ID in self.local_vars:
                 type = self.local_vars.get(ID)
                 self.loadType(type, "%" + ID)
-            elif ID in self.global_vars:
-                self.loadType(type, "@" + ID)
             else:
-                self.error(ctx.getStart().getLine(), "Unknown " + ID + ": local > global")
+                self.error(ctx.getStart().getLine(), "Unknown local variable" + ID)
 
         if ctx.INT() is not None:
             self.exitInt(self, ctx)
@@ -185,8 +184,8 @@ class LLVMActions(DallasListener):
 
     # Exit a parse tree produced by DallasParser#additiveExpression.
     def exitAdditiveExpression(self, ctx:DallasParser.AdditiveExpressionContext):
-        v1 = stack.pop()
-        v2 = stack.pop()
+        v1 = self.stack.pop()
+        v2 = self.stack.pop()
         addition = ctx.PLUS()
         substraction = ctx.MINUS()
         if v1.type == v2.type:
@@ -195,13 +194,13 @@ class LLVMActions(DallasListener):
                     LLVMGenerator.add_i32(v1.name, v2.name)
                 if substraction is not None:
                     LLVMGenerator.sub_i32(v1.name, v2.name)
-                stack.push(Value(f"%{LLVMGenerator.tmp-1}", VarType.INT))
+                self.stack.push(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.INT))
             if v1.type == VarType.REAL:
                 if addition is not None:
                     LLVMGenerator.add_double(v1.name, v2.name)
                 if substraction is not None:
                     LLVMGenerator.sub_double(v1.name, v2.name)
-                stack.push(Value(f"%{LLVMGenerator.tmp-1}", VarType.FLOAT))
+                self.stack.push(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.FLOAT))
         else:
             if addition is not None:
                 error(ctx.getStart().getLine(), "addition type mismatch")
@@ -215,8 +214,8 @@ class LLVMActions(DallasListener):
 
     # Exit a parse tree produced by DallasParser#multiplicativeExpression.
     def exitMultiplicativeExpression(self, ctx:DallasParser.MultiplicativeExpressionContext):
-        v1 = stack.pop()
-        v2 = stack.pop()
+        v1 = self.stack.pop()
+        v2 = self.stack.pop()
         multiplication = ctx.ASTERISK()
         division = ctx.SLASH()
         if v1.type == v2.type:
@@ -225,13 +224,13 @@ class LLVMActions(DallasListener):
                     LLVMGenerator.mul_i32(v1.name, v2.name)
                 if division is not None:
                     LLVMGenerator.div_i32(v1.name, v2.name)
-                stack.push(Value(f"%{LLVMGenerator.tmp-1}", VarType.INT))
-            if v1.type == VarType.REAL:
+                self.stack.push(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.INT))
+            if v1.type == VarType.FLOAT:
                 if multiplication is not None:
                     LLVMGenerator.mul_double(v1.name, v2.name)
                 if division is not None:
                     LLVMGenerator.div_double(v1.name, v2.name)
-                stack.push(Value(f"%{LLVMGenerator.tmp-1}", VarType.FLOAT))
+                self.stack.push(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.FLOAT))
         else:
             if multiplication is not None:
                 error(ctx.getStart().getLine(), "multiplication type mismatch")
@@ -291,48 +290,38 @@ class LLVMActions(DallasListener):
         self.stack.append(Value(ctx.ARRAY().getText(), VarType.ARRAY))
     
     # def exitToint(self, ctx:DallasParser.TointContext):
-    #     v = stack.pop()
+    #     v = self.stack.pop()
     #     LLVMGenerator.fptosi(v.name)
-    #     stack.push(Value(f"%{LLVMGenerator.tmp-1}", VarType.INT))
+    #     self.stack.push(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.INT))
     
     # def exitToreal(self, ctx:DallasParser.TorealContext):
-    #     v = stack.pop()
+    #     v = self.stack.pop()
     #     LLVMGenerator.sitofp(v.name)
-    #     stack.push(Value(f"%{LLVMGenerator.tmp-1}", VarType.REAL))
+    #     self.stack.push(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.REAL))
 
-    def exitCall(self, ctx:DallasParser.CallContext):
-        LLVMGenerator.call(ctx.ID().getText())
+    # def exitCall(self, ctx:DallasParser.CallContext):
+    #     LLVMGenerator.call(ctx.ID().getText())
     
-    def set_variable(ID, TYPE, global_var, local_var):
-        if global_var:
-            if ID not in global_vars:
-                global_vars[ID] = TYPE
-                if TYPE == "INT":
-                    LLVMGenerator.declare_i32(ID, True)
-                if TYPE == "REAL":
-                    LLVMGenerator.declare_double(ID, True)
-                if TYPE == "STRING":
-                    LLVMGenerator.declare_string(ID, True)
-                if TYPE == "ARRAY":
-                    LLVMGenerator.declare_array(ID, True)
-            id = "@" + ID
-        else:
-            if ID not in local_vars:
-                local_vars[ID] = TYPE
-                if TYPE == "INT":
-                    LLVMGenerator.declare_i32(ID, False)
-                if TYPE == "REAL":
-                    LLVMGenerator.declare_double(ID, False)
-                if TYPE == "STRING":
-                    LLVMGenerator.declare_string(ID, False)
-                if TYPE == "ARRAY":
-                    LLVMGenerator.declare_array(ID, False)
-            id = "%" + ID
+    def set_variable(ID, TYPE):
+        if ID not in local_vars:
+            local_vars[ID] = TYPE
+            declareType(TYPE, ID)
+        id = "%" + ID
         return id
 
 def error(line, msg):
     print("Error, line " + str(line) + ", " + msg, file=sys.stderr)
     sys.exit(1)
+
+def declareType(type, ID):
+    if type == "INT":
+        LLVMGenerator.declare_i32(ID, False)
+    if type == "FLOAT":
+        LLVMGenerator.declare_double(ID, False)
+    if type == "STRING":
+        LLVMGenerator.declare_string(ID, False)
+    if type == "ARRAY":
+        LLVMGenerator.declare_array(ID, False)
 
 def loadType(type, msg):
     if type == VarType.INT:

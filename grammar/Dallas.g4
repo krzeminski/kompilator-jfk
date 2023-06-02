@@ -79,6 +79,7 @@ dataType : INT_KEY
     | FLOAT_32_KEY
     | FLOAT_64_KEY
     | STRING_KEY
+    | ARRAY_KEY
     ;
 
 mathOperator: PLUS | MINUS | ASTERISK | SLASH;
@@ -105,6 +106,7 @@ FLOAT_KEY: 'float';
 FLOAT_32_KEY: 'float32';
 FLOAT_64_KEY: 'float64';
 STRING_KEY: 'string' ;
+ARRAY_KEY: 'array';
 
 FLOAT : INT DOT INT ;
 INT : [0-9]+ ;

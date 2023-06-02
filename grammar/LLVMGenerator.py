@@ -39,14 +39,28 @@ class LLVMGenerator:
         LLVMGenerator.reg += 1
 
     @staticmethod
-    def declare_i32(id,global_):
+    def declare_i32(id,global_ = False):
         if global_:
             LLVMGenerator.header_text += f"@{id} = global i32 0\n"
         else:
             LLVMGenerator.buffer += f"%{id} = alloca i32\n"
     
     @staticmethod
-    def declare_double(id,global_):
+    def declare_double(id,global_ = False):
+        if global_:
+            LLVMGenerator.header_text += f"@{id} = global double 0.0\n"
+        else:
+            LLVMGenerator.buffer += f"%{id} = alloca double\n"
+
+    @staticmethod
+    def declare_string(id,global_ = False):
+        if global_:
+            LLVMGenerator.header_text += f"@{id} = global i8\n"
+        else:
+            LLVMGenerator.buffer += f"%{id} = alloca i8\n"
+
+    @staticmethod
+    def declare_array(id,global_ = False):
         if global_:
             LLVMGenerator.header_text += f"@{id} = global double 0.0\n"
         else:
@@ -72,6 +86,16 @@ class LLVMGenerator:
 
     @staticmethod
     def load_double(id):
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load double, double* {id}\n"
+        LLVMGenerator.reg += 1
+
+    @staticmethod
+    def load_string(id):
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i8*, i8** %* {id}\n"
+        LLVMGenerator.reg += 1
+
+    @staticmethod
+    def load_array(id):
         LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load double, double* {id}\n"
         LLVMGenerator.reg += 1
 
