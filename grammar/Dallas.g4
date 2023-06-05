@@ -7,8 +7,8 @@ prog : (statement SEMI)+ EOF;
 statement
     : variableDeclaration
     | assignment
-    | printCall 
-    | readCall 
+    | printCall
+    | readCall
     | functionCall 
     | functionCallOnObject 
     | functionCallOnString 
@@ -31,45 +31,61 @@ functionCallOnString : STRING DOT functionCall ;
 
 array : LBRACK (expression (COMMA expression)*)? RBRACK ;
 
+toInt: LPAREN INT_KEY RPAREN;
+
+toFloat: LPAREN FLOAT_KEY RPAREN;
+
 // Wyrażenia
 expression
     : ID
     | functionCall
-    | expression OR expression
-    | expression XOR expression 
-    | expression AND expression 
-    | expression EQ expression 
-    | EXCLAMATION expression 
-    | additiveExpression
+    | value
+    | array
+    | logicalExpression
+    | additiveExpression        
+    ;
+
+logicalExpression
+    : simpleLogicalExpression OR simpleLogicalExpression  #or
+    | simpleLogicalExpression XOR simpleLogicalExpression #xor
+    | simpleLogicalExpression AND simpleLogicalExpression #and
+    | simpleLogicalExpression EQ simpleLogicalExpression  #equal
+    | EXCLAMATION simpleLogicalExpression    #negation
+    | BOOL                        #bool
+    ;
+
+simpleLogicalExpression
+    : ID
     | INT
     | FLOAT
     | STRING
-    | array
+    | BOOL
+    | additiveExpression
     ;
 
 additiveExpression
-    : multiplicativeExpression
-    | additiveExpression PLUS multiplicativeExpression
-    | additiveExpression MINUS multiplicativeExpression
+    : multiplicativeExpression #singleValue3
+    | additiveExpression PLUS multiplicativeExpression  #add
+    | additiveExpression MINUS multiplicativeExpression #substract
     ;
 
 multiplicativeExpression
-    : unaryExpression
-    | multiplicativeExpression ASTERISK unaryExpression
-    | multiplicativeExpression SLASH unaryExpression
+    : unaryExpression #singleValue2
+    | multiplicativeExpression ASTERISK unaryExpression #multiply
+    | multiplicativeExpression SLASH unaryExpression    #divide
     ;
 
 unaryExpression
-    : primaryExpression
-    | PLUS unaryExpression
-    | MINUS unaryExpression
+    : primaryExpression #singleValue1
+    | PLUS unaryExpression  #positive
+    | MINUS unaryExpression #negative
     ;
 
 primaryExpression
-    : value
-    | LPAREN expression RPAREN
-    | TOINT expression 
-    | TOFLOAT expression 
+    : value                     #singleValue
+    | LPAREN expression RPAREN  #paren
+    | toInt expression          #toint
+    | toFloat expression        #tofloat
     ;
 
 value
@@ -77,6 +93,7 @@ value
     | INT
     | FLOAT
     | STRING
+    | BOOL
     ;
 
 dataType : INT_KEY
@@ -85,12 +102,11 @@ dataType : INT_KEY
     | FLOAT_64_KEY
     | STRING_KEY
     | ARRAY_KEY
+    | BOOL_KEY
     ;
 
 PRINT:	'print' ;
 READ:	'read' ;
-TOINT: LPAREN INT_KEY RPAREN ;
-TOFLOAT: LPAREN FLOAT_KEY RPAREN ;
 
 AND : '&&' ;
 OR : '||' ;
@@ -111,11 +127,15 @@ FLOAT_KEY: 'float';
 FLOAT_32_KEY: 'float32';
 FLOAT_64_KEY: 'float64';
 STRING_KEY: 'string' ;
+BOOL_KEY: 'bool' ;
 ARRAY_KEY: 'array';
 
 FLOAT : INT DOT INT ;
 INT : [0-9]+ ;
 STRING: DQ ~["\r\n]* DQ;
+BOOL: TRUE | FALSE ;
+TRUE: 'true';
+FALSE:'false';
 
 PLUS: '+' ;
 MINUS: '-' ;

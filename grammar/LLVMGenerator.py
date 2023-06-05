@@ -66,6 +66,13 @@ class LLVMGenerator:
         else:
             LLVMGenerator.buffer += f"%{id} = alloca double\n"
     
+    @staticmethod
+    def declare_bool(id,global_ = False):
+        if global_:
+            LLVMGenerator.header_text += f"@{id} = global i1 0.0\n"
+        else:
+            LLVMGenerator.buffer += f"%{id} = alloca i1\n"
+
     @staticmethod   
     def call(id):
         LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = call i32 @{id}()\n"
@@ -81,8 +88,8 @@ class LLVMGenerator:
        
     @staticmethod
     def assign_string(id, value):
-        LLVMGenerator.buffer += f"store double {value}, i8*, i8** {id}\n"
-       
+        LLVMGenerator.buffer += f"store  i8* {LLVMGenerator.reg-1}, i8** {id}\n"
+
     @staticmethod
     def assign_array(id, value):
         LLVMGenerator.buffer += f"store double {value}, double* {id}\n"

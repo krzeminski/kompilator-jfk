@@ -1,4 +1,5 @@
 import enum
+import sys
 from collections import deque
 from LLVMGenerator import LLVMGenerator
 from DallasListener import DallasListener
@@ -9,14 +10,17 @@ class VarType(enum.Enum):
     INT = 2
     FLOAT = 3
     STRING = 4
-    ARRAY = 5
-    UNKNOWN = 6
+    BOOLEAN = 5
+    ARRAY = 6
+    UNKNOWN = 7
 
 class Value:
     def __init__(self, name, type, length):
         self.name = name
         self.type = type
-        self.length = length
+        self.length = 1
+        if length is not None:
+            self.length = length
 
 class LLVMActions(DallasListener):
     def __init__(self):
@@ -35,34 +39,27 @@ class LLVMActions(DallasListener):
         LLVMGenerator.close_main()
         print(LLVMGenerator.generate())
 
-    # Enter a parse tree produced by DallasParser#statement.
-    def enterStatement(self, ctx:DallasParser.StatementContext):
-        pass
-
-    # Exit a parse tree produced by DallasParser#statement.
-    def exitStatement(self, ctx:DallasParser.StatementContext):
-        pass
-
-
-    # Enter a parse tree produced by DallasParser#variableDeclaration.
-    def enterVariableDeclaration(self, ctx:DallasParser.VariableDeclarationContext):
-        pass
 
     # Exit a parse tree produced by DallasParser#variableDeclaration.
     def exitVariableDeclaration(self, ctx:DallasParser.VariableDeclarationContext):
         ID = ctx.ID().getText()
+        self.local_vars[ID] = None;
         if ctx.dataType().INT_KEY() is not None:
             LLVMGenerator.declare_i32(ID);
-            self.stack.append(Value("%" + str(LLVMGenerator.main_tmp - 1), VarType.ID, 1))
+            # self.stack.append(Value("%" + str(LLVMGenerator.main_tmp - 1), VarType.INT, 1))
         if ctx.dataType().FLOAT_KEY() is not None:
             LLVMGenerator.declare_double(ID);
-            self.stack.append(Value("%" + str(LLVMGenerator.main_tmp - 1), VarType.ID, 1))
+            # self.stack.append(Value("%" + str(LLVMGenerator.main_tmp - 1), VarType.ID, 1))
         if ctx.dataType().STRING_KEY() is not None:
             LLVMGenerator.declare_string(ID);
-            self.stack.append(Value("%" + str(LLVMGenerator.main_tmp - 1), VarType.ID, 64))
+            # self.stack.append(Value("%" + str(LLVMGenerator.main_tmp - 1), VarType.ID, 64))
         if ctx.dataType().ARRAY_KEY() is not None:
             LLVMGenerator.declare_array(ID);
-            self.stack.append(Value("%" + str(LLVMGenerator.main_tmp - 1), VarType.ID, 64))
+            # self.stack.append(Value("%" + str(LLVMGenerator.main_tmp - 1), VarType.ID, 64))
+        if ctx.dataType().BOOL_KEY() is not None:
+            LLVMGenerator.declare_bool(ID);
+            # self.stack.append(Value("%" + str(LLVMGenerator.main_tmp - 1), VarType.ID, 1))
+
 
 
     # Enter a parse tree produced by DallasParser#printCall.
@@ -72,7 +69,7 @@ class LLVMActions(DallasListener):
     # Exit a parse tree produced by DallasParser#printCall.
     def exitPrintCall(self, ctx:DallasParser.PrintCallContext):
         ID = ctx.ID().getText()
-        type = local_vars.get(ID)
+        type = self.local_vars.get(ID)
         if type is not None:
             if type == VarType.INT:
                 LLVMGenerator.printf_i32(self.set_variable(ID, type))
@@ -137,19 +134,28 @@ class LLVMActions(DallasListener):
 
     # Exit a parse tree produced by DallasParser#assignment.
     def exitAssignment(self, ctx:DallasParser.AssignmentContext):
+        print('assign')
         ID = ctx.ID().getText()
         v = self.stack.pop()
 
+        print(ID)
+        print(v.type)
+        print(self.stack)
+
+        if ID not in self.local_vars:
+            error(ctx.getRuleIndex(), "unknown variable " + ID)
+            return
         if v.type == VarType.INT:
-            LLVMGenerator.assign_i32(self.set_variable(ID, v.type), v.name)
+            LLVMGenerator.assign_i32(self.set_variable(ID, v), v.name)
         if v.type == VarType.FLOAT:
-            LLVMGenerator.assign_double(self.set_variable(ID, v.type), v.name)
+            LLVMGenerator.assign_double(self.set_variable(ID, v), v.name)
         if v.type == VarType.STRING:
-            LLVMGenerator.assign_string(self.set_variable(ID, v.type), v.name)
+            LLVMGenerator.assign_string(self.set_variable(ID, v))
         if v.type == VarType.ARRAY:
-            LLVMGenerator.assign_array(self.set_variable(ID, v.type), v.name)
+            LLVMGenerator.assign_array(self.set_variable(ID, v), v.name)
         if v.type == VarType.UNKNOWN:
-            self.error(ctx.getStart().getLine(), "unknown variable " + ID)
+            error(ctx.getRuleIndex(), "unknown variable " + ID)
+            return
 
 
     # Enter a parse tree produced by DallasParser#expression.
@@ -158,22 +164,7 @@ class LLVMActions(DallasListener):
 
     # Exit a parse tree produced by DallasParser#expression.
     def exitExpression(self, ctx:DallasParser.ExpressionContext):
-        if ctx.ID() is not None:
-            ID = ctx.ID().getText()
-            if ID in self.local_vars:
-                type = self.local_vars.get(ID)
-                self.loadType(type, "%" + ID)
-            else:
-                self.error(ctx.getStart().getLine(), "Unknown local variable" + ID)
-
-        if ctx.INT() is not None:
-            self.exitInt(self, ctx)
-        if ctx.FLOAT() is not None:
-            self.exitFloat(self, ctx)
-        if ctx.STRING() is not None:
-            self.exitString(self, ctx)
-        if ctx.array() is not None:
-            self.exitArray(self, ctx)
+        pass
         # next if with logical expressions
 
 
@@ -183,10 +174,16 @@ class LLVMActions(DallasListener):
 
     # Exit a parse tree produced by DallasParser#additiveExpression.
     def exitAdditiveExpression(self, ctx:DallasParser.AdditiveExpressionContext):
+        print("ctx:");
+        print(ctx);
+        print("stack:")
         v1 = self.stack.pop()
-        v2 = self.stack.pop()
+        print(v1.type);
         addition = ctx.PLUS()
         substraction = ctx.MINUS()
+        print(addition);
+        print(substraction);
+        v2 = self.stack.pop()
         if v1.type == v2.type:
             if v1.type == VarType.INT:
                 if addition is not None:
@@ -252,10 +249,17 @@ class LLVMActions(DallasListener):
 
     # Exit a parse tree produced by DallasParser#primaryExpression.
     def exitPrimaryExpression(self, ctx:DallasParser.PrimaryExpressionContext):
-        if ctx.INT() is not None:
-            self.stack.append(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.INT, 1))
-        if ctx.FLOAT() is not None:
-            self.stack.append(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.FLOAT, 1))
+        # todo: IMPLEMENT THIS
+        print(ctx)
+        if ctx.LPAREN() and ctx.RPAREN is True :
+            pass
+        if ctx.toInt() is not None:
+            v = self.stack.pop();
+            LLVMGenerator.fptosi(v.name);
+            self.stack.append(Value(f"%{LLVMGenerator.reg-1}", VarType.INT, 1))
+        if ctx.toFloat() is not None:
+            LLVMGenerator.sitofp(v.name);
+            self.stack.append(Value(f"%{LLVMGenerator.reg-1}", VarType.FLOAT, 1))
         pass
 
 
@@ -267,35 +271,43 @@ class LLVMActions(DallasListener):
     def exitDataType(self, ctx:DallasParser.DataTypeContext):
         pass
 
-    # Enter a parse tree produced by DallasParser#mathOperator.
-    def enterMathOperator(self, ctx:DallasParser.MathOperatorContext):
-        pass
-
-    # Exit a parse tree produced by DallasParser#mathOperator.
-    def exitMathOperator(self, ctx:DallasParser.MathOperatorContext):
-        pass
-
     # def exitEqual(self, ctx):
     #     ID = ctx.ID().getText()
     #     INT = ctx.INT().getText()
     #     LLVMGenerator.icmp(self.set_variable(ID, VarType.INT), INT)
 
-    def exitInt(self, ctx):
-        self.stack.append(Value(ctx.INT().getText(), VarType.INT,1))
+    def exitValue(self, ctx:DallasParser.ValueContext):
+        print('value')
+        if ctx.ID() is not None:
+            ID = ctx.ID().getText()
+            if ID in self.local_vars:
+                print(ID + 'in local vars')
+                v = self.local_vars.get(ID)
+                loadType(v.type, "%" + ID)
+                self.stack.append(Value("%" + (LLVMGenerator.reg - 1), v.type, v.length));
+            else:
+                print(ID)
+                print(self.local_vars)
+                print(ctx)
+                error(ctx, "Unknown local variable" + ID)
 
-    def exitFloat(self, ctx):
-        self.stack.append(Value(ctx.FLOAT().getText(), VarType.FLOAT,1))
+        if ctx.INT() is not None:
+            self.stack.append(Value(ctx.INT().getText(), VarType.INT, 1))
+        if ctx.FLOAT() is not None:
+            self.stack.append(Value(ctx.FLOAT().getText(), VarType.FLOAT, 1))
+        if ctx.STRING() is not None:
+            tmp = ctx.STRING().getText();
+            print('tmp'+ tmp)
+            self.stack.append(Value(ctx.STRING().getText(), VarType.STRING, 64))
+        if ctx.BOOL() is not None:
+            self.stack.append(Value(ctx.INT().getText(), VarType.BOOLEAN, 1))
+        # if ctx.array() is not None:
+        #     self.exitArray(ctx)
 
-    def exitString(self, ctx):
-        self.stack.append(Value(ctx.STRING().getText(), VarType.STRING, 64))
-
-    def exitArray(self, ctx):
-        self.stack.append(Value(ctx.ARRAY().getText(), VarType.ARRAY,64))
-
-    def set_variable(ID, TYPE):
-        if ID not in local_vars:
-            local_vars[ID] = TYPE
-            declareType(TYPE, ID)
+    def set_variable(self, ID, value):
+        if ID not in self.local_vars:
+            self.local_vars[ID] = value
+            declareType(value, ID)
         id = "%" + ID
         return id
 
