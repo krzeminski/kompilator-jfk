@@ -1,21 +1,22 @@
 grammar Dallas;
 
 // Reguły startowe
-prog : statement+ EOF;
+prog : (statement SEMI)+ EOF;
 
 // Instrukcje
-statement : variableDeclaration
-          | printCall SEMI
-          | readCall SEMI
-          | functionCall SEMI
-          | functionCallOnObject SEMI
-          | functionCallOnString SEMI
-          | assignment
-          | expression SEMI
-          ;
+statement
+    : variableDeclaration
+    | assignment
+    | printCall 
+    | readCall 
+    | functionCall 
+    | functionCallOnObject 
+    | functionCallOnString 
+    ;
 
-// Deklaracja zmiennych
-variableDeclaration : dataType ID SEMI ;
+variableDeclaration : dataType ID ;
+
+assignment : ID ASSIGN expression;
 
 // Wywołanie funkcji
 printCall : PRINT LPAREN expression RPAREN ;
@@ -30,12 +31,9 @@ functionCallOnString : STRING DOT functionCall ;
 
 array : LBRACK (expression (COMMA expression)*)? RBRACK ;
 
-// Przypisanie wartości
-assignment : ID ASSIGN expression SEMI;
-
 // Wyrażenia
-expression : ID
-    | assignment
+expression
+    : ID
     | functionCall
     | expression OR expression
     | expression XOR expression 
@@ -68,10 +66,17 @@ unaryExpression
     ;
 
 primaryExpression
-    : INT
-    | FLOAT
+    : value
     | LPAREN expression RPAREN
-    | ID
+    | TOINT expression 
+    | TOFLOAT expression 
+    ;
+
+value
+    : ID
+    | INT
+    | FLOAT
+    | STRING
     ;
 
 dataType : INT_KEY
@@ -82,10 +87,10 @@ dataType : INT_KEY
     | ARRAY_KEY
     ;
 
-mathOperator: PLUS | MINUS | ASTERISK | SLASH;
-
 PRINT:	'print' ;
 READ:	'read' ;
+TOINT: LPAREN INT_KEY RPAREN ;
+TOFLOAT: LPAREN FLOAT_KEY RPAREN ;
 
 AND : '&&' ;
 OR : '||' ;

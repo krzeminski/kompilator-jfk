@@ -1,6 +1,5 @@
 import enum
 from collections import deque
-
 from LLVMGenerator import LLVMGenerator
 from DallasListener import DallasListener
 from DallasParser import DallasParser
@@ -76,13 +75,13 @@ class LLVMActions(DallasListener):
         type = local_vars.get(ID)
         if type is not None:
             if type == VarType.INT:
-                LLVMGenerator.printf_i32(set_variable(ID, type))
+                LLVMGenerator.printf_i32(self.set_variable(ID, type))
             if type == VarType.FLOAT:
-                LLVMGenerator.printf_double(set_variable(ID, type))
+                LLVMGenerator.printf_double(self.set_variable(ID, type))
             if type == VarType.STRING:
-                LLVMGenerator.printf_string(set_variable(ID, type))
+                LLVMGenerator.printf_string(self.set_variable(ID, type))
             if type == VarType.ARRAY:
-                LLVMGenerator.printf_array(set_variable(ID, type))
+                LLVMGenerator.printf_array(self.set_variable(ID, type))
         else:
             error(ctx.getStart().getLine(), f"unknown variable {ID}")
 
@@ -94,7 +93,7 @@ class LLVMActions(DallasListener):
     # Exit a parse tree produced by DallasParser#readCall.
     def exitReadCall(self, ctx:DallasParser.ReadCallContext):
         ID = ctx.ID().getText()
-        LLVMGenerator.scanf(set_variable(ID, VarType.INT))
+        LLVMGenerator.scanf(self.set_variable(ID, VarType.INT))
 
 
     # Enter a parse tree produced by DallasParser#functionCall.
@@ -282,30 +281,17 @@ class LLVMActions(DallasListener):
     #     LLVMGenerator.icmp(self.set_variable(ID, VarType.INT), INT)
 
     def exitInt(self, ctx):
-        self.stack.append(Value(ctx.INT().getText(), VarType.INT))
+        self.stack.append(Value(ctx.INT().getText(), VarType.INT,1))
 
     def exitFloat(self, ctx):
-        self.stack.append(Value(ctx.FLOAT().getText(), VarType.FLOAT))
+        self.stack.append(Value(ctx.FLOAT().getText(), VarType.FLOAT,1))
 
     def exitString(self, ctx):
-        self.stack.append(Value(ctx.STRING().getText(), VarType.STRING))
+        self.stack.append(Value(ctx.STRING().getText(), VarType.STRING, 64))
 
     def exitArray(self, ctx):
-        self.stack.append(Value(ctx.ARRAY().getText(), VarType.ARRAY))
-    
-    # def exitToint(self, ctx:DallasParser.TointContext):
-    #     v = self.stack.pop()
-    #     LLVMGenerator.fptosi(v.name)
-    #     self.stack.push(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.INT))
-    
-    # def exitToreal(self, ctx:DallasParser.TorealContext):
-    #     v = self.stack.pop()
-    #     LLVMGenerator.sitofp(v.name)
-    #     self.stack.push(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.REAL))
+        self.stack.append(Value(ctx.ARRAY().getText(), VarType.ARRAY,64))
 
-    # def exitCall(self, ctx:DallasParser.CallContext):
-    #     LLVMGenerator.call(ctx.ID().getText())
-    
     def set_variable(ID, TYPE):
         if ID not in local_vars:
             local_vars[ID] = TYPE

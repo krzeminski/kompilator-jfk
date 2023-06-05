@@ -35,6 +35,15 @@ class DallasListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by DallasParser#assignment.
+    def enterAssignment(self, ctx:DallasParser.AssignmentContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#assignment.
+    def exitAssignment(self, ctx:DallasParser.AssignmentContext):
+        pass
+
+
     # Enter a parse tree produced by DallasParser#printCall.
     def enterPrintCall(self, ctx:DallasParser.PrintCallContext):
         pass
@@ -89,15 +98,6 @@ class DallasListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by DallasParser#assignment.
-    def enterAssignment(self, ctx:DallasParser.AssignmentContext):
-        pass
-
-    # Exit a parse tree produced by DallasParser#assignment.
-    def exitAssignment(self, ctx:DallasParser.AssignmentContext):
-        pass
-
-
     # Enter a parse tree produced by DallasParser#expression.
     def enterExpression(self, ctx:DallasParser.ExpressionContext):
         pass
@@ -143,21 +143,21 @@ class DallasListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by DallasParser#value.
+    def enterValue(self, ctx:DallasParser.ValueContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#value.
+    def exitValue(self, ctx:DallasParser.ValueContext):
+        pass
+
+
     # Enter a parse tree produced by DallasParser#dataType.
     def enterDataType(self, ctx:DallasParser.DataTypeContext):
         pass
 
     # Exit a parse tree produced by DallasParser#dataType.
     def exitDataType(self, ctx:DallasParser.DataTypeContext):
-        pass
-
-
-    # Enter a parse tree produced by DallasParser#mathOperator.
-    def enterMathOperator(self, ctx:DallasParser.MathOperatorContext):
-        pass
-
-    # Exit a parse tree produced by DallasParser#mathOperator.
-    def exitMathOperator(self, ctx:DallasParser.MathOperatorContext):
         pass
 
 
