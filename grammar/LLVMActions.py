@@ -22,6 +22,9 @@ class Value:
         if length is not None:
             self.length = length
 
+    def __str__(self):
+        return f'Value: {self.type} = '+ f'{self.name}'
+
 class LLVMActions(DallasListener):
     def __init__(self):
         self.local_vars = {}
@@ -42,7 +45,7 @@ class LLVMActions(DallasListener):
 
     # Exit a parse tree produced by DallasParser#variableDeclaration.
     def exitVariableDeclaration(self, ctx:DallasParser.VariableDeclarationContext):
-        ID = ctx.ID().getText()
+        ID = ctx.ID()
         self.local_vars[ID] = None;
         if ctx.dataType().INT_KEY() is not None:
             LLVMGenerator.declare_i32(ID);
@@ -68,7 +71,7 @@ class LLVMActions(DallasListener):
 
     # Exit a parse tree produced by DallasParser#printCall.
     def exitPrintCall(self, ctx:DallasParser.PrintCallContext):
-        ID = ctx.ID().getText()
+        ID = ctx.ID()
         type = self.local_vars.get(ID)
         if type is not None:
             if type == VarType.INT:
@@ -89,7 +92,7 @@ class LLVMActions(DallasListener):
 
     # Exit a parse tree produced by DallasParser#readCall.
     def exitReadCall(self, ctx:DallasParser.ReadCallContext):
-        ID = ctx.ID().getText()
+        ID = ctx.ID()
         LLVMGenerator.scanf(self.set_variable(ID, VarType.INT))
 
 
@@ -128,22 +131,21 @@ class LLVMActions(DallasListener):
     def exitArray(self, ctx:DallasParser.ArrayContext):
         pass
 
-    # Enter a parse tree produced by DallasParser#assignment.
-    def enterAssignment(self, ctx:DallasParser.AssignmentContext):
-        pass
 
     # Exit a parse tree produced by DallasParser#assignment.
     def exitAssignment(self, ctx:DallasParser.AssignmentContext):
         print('assign')
+        print(self.stack)
+        print(self.local_vars)
         ID = ctx.ID().getText()
         v = self.stack.pop()
 
         print(ID)
-        print(v.type)
-        print(self.stack)
+        print(v)
 
-        if ID not in self.local_vars:
-            error(ctx.getRuleIndex(), "unknown variable " + ID)
+        if hasattr(self.local_vars, ID):
+            error(ctx.getRuleIndex(), "unknown variable ")
+            # error(ctx.getRuleIndex(), "unknown variable " + ID)
             return
         if v.type == VarType.INT:
             LLVMGenerator.assign_i32(self.set_variable(ID, v), v.name)
@@ -151,6 +153,8 @@ class LLVMActions(DallasListener):
             LLVMGenerator.assign_double(self.set_variable(ID, v), v.name)
         if v.type == VarType.STRING:
             LLVMGenerator.assign_string(self.set_variable(ID, v))
+        if v.type == VarType.BOOLEAN:
+            LLVMGenerator.assign_bool(self.set_variable(ID, v), v.name)
         if v.type == VarType.ARRAY:
             LLVMGenerator.assign_array(self.set_variable(ID, v), v.name)
         if v.type == VarType.UNKNOWN:
@@ -272,8 +276,8 @@ class LLVMActions(DallasListener):
         pass
 
     # def exitEqual(self, ctx):
-    #     ID = ctx.ID().getText()
-    #     INT = ctx.INT().getText()
+    #     ID = ctx.ID()
+    #     INT = ctx.INT()
     #     LLVMGenerator.icmp(self.set_variable(ID, VarType.INT), INT)
 
     def exitValue(self, ctx:DallasParser.ValueContext):
@@ -284,7 +288,7 @@ class LLVMActions(DallasListener):
                 print(ID + 'in local vars')
                 v = self.local_vars.get(ID)
                 loadType(v.type, "%" + ID)
-                self.stack.append(Value("%" + (LLVMGenerator.reg - 1), v.type, v.length));
+                self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), v.type, v.length));
             else:
                 print(ID)
                 print(self.local_vars)
@@ -300,7 +304,7 @@ class LLVMActions(DallasListener):
             print('tmp'+ tmp)
             self.stack.append(Value(ctx.STRING().getText(), VarType.STRING, 64))
         if ctx.BOOL() is not None:
-            self.stack.append(Value(ctx.INT().getText(), VarType.BOOLEAN, 1))
+            self.stack.append(Value(ctx.BOOL().getText(), VarType.BOOLEAN, 1))
         # if ctx.array() is not None:
         #     self.exitArray(ctx)
 
@@ -324,6 +328,8 @@ def declareType(type, ID):
         LLVMGenerator.declare_string(ID, False)
     if type == "ARRAY":
         LLVMGenerator.declare_array(ID, False)
+    if type == "BOOL":
+        LLVMGenerator.declare_bool(ID, False)
 
 def loadType(type, msg):
     if type == VarType.INT:
@@ -334,3 +340,5 @@ def loadType(type, msg):
         LLVMGenerator.load_string(msg)
     if type == VarType.ARRAY:
         LLVMGenerator.load_array(msg)
+    if type == VarType.BOOLEAN:
+        LLVMGenerator.load_bool(msg)

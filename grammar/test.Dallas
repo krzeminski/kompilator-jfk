@@ -1,9 +1,11 @@
-int nazwa1;
+int int1;
+int int2;
 float float1;
 bool bool1;
 array array1;
 string string1;
-nazwa1 = 4;
+int1 = 4;
 float1 = 2.5123;
 bool1 = true;
 string1 = "Hello World";
+int2 = int1 + 6;

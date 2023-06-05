@@ -87,7 +87,7 @@ class LLVMGenerator:
         LLVMGenerator.buffer += f"store double {value}, double* {id}\n"
        
     @staticmethod
-    def assign_string(id, value):
+    def assign_string(id):
         LLVMGenerator.buffer += f"store  i8* {LLVMGenerator.reg-1}, i8** {id}\n"
 
     @staticmethod
