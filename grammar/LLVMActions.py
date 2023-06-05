@@ -88,10 +88,10 @@ class LLVMActions(DallasListener):
             v = self.local_vars.get(ID)
             if v.type == VarType.INT:
                 self.set_variable(ID, Value(ID, VarType.INT, 0))
-                LLVMGenerator.scanf_i32("%" +ID)
+                LLVMGenerator.scanf_i32(ID)
             elif v.type == VarType.FLOAT:
                 self.set_variable(ID, Value(ID, VarType.FLOAT, 0))
-                LLVMGenerator.scanf_double("%" +ID)
+                LLVMGenerator.scanf_double(ID)
         else:
             error(ctx.getRuleIndex(), f"unknown variable {ID}")
 
@@ -267,8 +267,8 @@ class LLVMActions(DallasListener):
         if ID not in self.local_vars:
             self.local_vars[ID] = value
             declareType(value, ID)
-        id = "%" + ID
-        return id
+        # id = "%" + ID
+        return ID
 
 def error(line, msg):
     print("Error, line " + str(line) + ", " + msg, file=sys.stderr)
