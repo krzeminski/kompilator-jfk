@@ -32,7 +32,7 @@ class LLVMGenerator:
     def scanf_i32(id):
         LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @strsi, i32 0, i32 0), i32* {id})\n"
         LLVMGenerator.reg += 1
-    
+
     @staticmethod
     def scanf_double(id):
         LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strsd, i32 0, i32 0), double* {id})\n"
