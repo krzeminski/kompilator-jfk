@@ -63,37 +63,33 @@ class LLVMActions(DallasListener):
             LLVMGenerator.declare_bool(ID);
             # self.stack.append(Value("%" + str(LLVMGenerator.main_tmp - 1), VarType.ID, 1))
 
-
-
-    # Enter a parse tree produced by DallasParser#printCall.
-    def enterPrintCall(self, ctx:DallasParser.PrintCallContext):
-        pass
-
     # Exit a parse tree produced by DallasParser#printCall.
     def exitPrintCall(self, ctx:DallasParser.PrintCallContext):
-        ID = ctx.ID()
-        type = self.local_vars.get(ID)
-        if type is not None:
-            if type == VarType.INT:
-                LLVMGenerator.printf_i32(self.set_variable(ID, type))
-            if type == VarType.FLOAT:
-                LLVMGenerator.printf_double(self.set_variable(ID, type))
-            if type == VarType.STRING:
-                LLVMGenerator.printf_string(self.set_variable(ID, type))
-            if type == VarType.ARRAY:
-                LLVMGenerator.printf_array(self.set_variable(ID, type))
+        ID = ctx.ID().getText()
+        v = self.local_vars.get(ID)
+        if v is not None:
+            if v.type == VarType.INT:
+                LLVMGenerator.printf_i32(self.set_variable(ID, v))
+            if v.type == VarType.FLOAT:
+                LLVMGenerator.printf_double(self.set_variable(ID, v))
+            if v.type == VarType.STRING:
+                LLVMGenerator.printf_string(self.set_variable(ID, v))
+            if v.type == VarType.BOOLEAN:
+                LLVMGenerator.printf_string(self.set_variable(ID, v))
+            # if v.type == VarType.ARRAY:
+            #     LLVMGenerator.printf_array(self.set_variable(ID, v))
         else:
-            error(ctx.getStart().getLine(), f"unknown variable {ID}")
-
-
-    # Enter a parse tree produced by DallasParser#readCall.
-    def enterReadCall(self, ctx:DallasParser.ReadCallContext):
-        pass
+            error(ctx.getRuleIndex(), f"unknown variable {ID}")
 
     # Exit a parse tree produced by DallasParser#readCall.
     def exitReadCall(self, ctx:DallasParser.ReadCallContext):
-        ID = ctx.ID()
-        LLVMGenerator.scanf(self.set_variable(ID, VarType.INT))
+        ID = ctx.ID().getText()
+        if ID.isdigit():
+            self.set_variable(ID, Value(ID, VarType.INT))
+            LLVMGenerator.scanf_i32("%" +ID)
+        else:
+            self.set_variable(ID, Value(ID, VarType.FLOAT))
+            LLVMGenerator.scanf_double("%" +ID)
 
 
     # Enter a parse tree produced by DallasParser#functionCall.
@@ -134,18 +130,15 @@ class LLVMActions(DallasListener):
 
     # Exit a parse tree produced by DallasParser#assignment.
     def exitAssignment(self, ctx:DallasParser.AssignmentContext):
-        print('assign')
-        print(self.stack)
-        print(self.local_vars)
         ID = ctx.ID().getText()
         v = self.stack.pop()
 
+        print('assign')
         print(ID)
         print(v)
 
         if hasattr(self.local_vars, ID):
             error(ctx.getRuleIndex(), "unknown variable ")
-            # error(ctx.getRuleIndex(), "unknown variable " + ID)
             return
         if v.type == VarType.INT:
             LLVMGenerator.assign_i32(self.set_variable(ID, v), v.name)
@@ -203,9 +196,9 @@ class LLVMActions(DallasListener):
                 self.stack.push(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.FLOAT))
         else:
             if addition is not None:
-                error(ctx.getStart().getLine(), "addition type mismatch")
+                error(ctx.getRuleIndex(), "addition type mismatch")
             if substraction is not None:
-                error(ctx.getStart().getLine(), "substraction type mismatch")
+                error(ctx.getRuleIndex(), "substraction type mismatch")
 
 
     # Enter a parse tree produced by DallasParser#multiplicativeExpression.
@@ -233,9 +226,9 @@ class LLVMActions(DallasListener):
                 self.stack.push(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.FLOAT))
         else:
             if multiplication is not None:
-                error(ctx.getStart().getLine(), "multiplication type mismatch")
+                error(ctx.getRuleIndex(), "multiplication type mismatch")
             if division is not None:
-                error(ctx.getStart().getLine(), "division type mismatch")
+                error(ctx.getRuleIndex(), "division type mismatch")
 
 
     # Enter a parse tree produced by DallasParser#unaryExpression.
@@ -285,15 +278,12 @@ class LLVMActions(DallasListener):
         if ctx.ID() is not None:
             ID = ctx.ID().getText()
             if ID in self.local_vars:
-                print(ID + 'in local vars')
                 v = self.local_vars.get(ID)
                 loadType(v.type, "%" + ID)
                 self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), v.type, v.length));
             else:
                 print(ID)
-                print(self.local_vars)
-                print(ctx)
-                error(ctx, "Unknown local variable" + ID)
+                error(ctx.getRuleIndex(), f"unknown variable {ID}")
 
         if ctx.INT() is not None:
             self.stack.append(Value(ctx.INT().getText(), VarType.INT, 1))
