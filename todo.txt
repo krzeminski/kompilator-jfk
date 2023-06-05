@@ -1,0 +1,5 @@
+1. read print
+2. arytmetyka
+3. obsługa stringów
+4. obsługa operacji logicznych (and or)
+5. array declare, assign, alloca input
