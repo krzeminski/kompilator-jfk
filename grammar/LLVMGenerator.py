@@ -1,10 +1,8 @@
 class LLVMGenerator:
     header_text = ""
     main_text = ""
-    main_tmp = 1
     reg = 1
-    br = 0
-    brstack = []
+    str = 1
     buffer = ""
 
     @staticmethod
@@ -27,6 +25,10 @@ class LLVMGenerator:
         LLVMGenerator.reg += 1
         LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double %{LLVMGenerator.reg-1})\n"
         LLVMGenerator.reg += 1
+
+    @staticmethod
+    def printf_string(id):
+        pass
 
     @staticmethod
     def scanf_i32(id):
@@ -88,11 +90,7 @@ class LLVMGenerator:
        
     @staticmethod
     def assign_bool(id, value):
-<<<<<<< HEAD
         LLVMGenerator.buffer += f"store i1 {value}, i1* {id}\n"
-=======
-        LLVMGenerator.buffer += f"store bool {value}, i1* {id}\n"
->>>>>>> d19c84bdfe3bbc56ed383a0d089646dda6daf796
 
     @staticmethod
     def assign_string(id):
@@ -114,11 +112,7 @@ class LLVMGenerator:
 
     @staticmethod
     def load_bool(id):
-<<<<<<< HEAD
         LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i1, i1* {id}\n"
-=======
-        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load bool, i1* {id}\n"
->>>>>>> d19c84bdfe3bbc56ed383a0d089646dda6daf796
         LLVMGenerator.reg += 1
 
     @staticmethod

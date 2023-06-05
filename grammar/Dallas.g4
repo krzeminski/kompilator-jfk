@@ -19,9 +19,9 @@ variableDeclaration : dataType ID ;
 assignment : ID ASSIGN expression;
 
 // Wywołanie funkcji
-printCall : PRINT LPAREN expression RPAREN ;
+printCall : PRINT LPAREN ID RPAREN ;
 
-readCall : READ LPAREN expression RPAREN ;
+readCall : READ LPAREN ID RPAREN ;
 
 functionCall : ID LPAREN (expression (COMMA expression)*)? RPAREN ;
 

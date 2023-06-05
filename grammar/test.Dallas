@@ -8,6 +8,5 @@ int1 = 4;
 float1 = 2.5123;
 bool1 = true;
 string1 = "Hello World";
+read(int2);
 print(string1);
-print("Print string");
-read(string1);

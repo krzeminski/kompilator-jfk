@@ -40,8 +40,8 @@ def serializedATN():
         0,0,58,55,1,0,0,0,58,56,1,0,0,0,58,57,1,0,0,0,59,3,1,0,0,0,60,61,
         3,40,20,0,61,62,5,36,0,0,62,5,1,0,0,0,63,64,5,36,0,0,64,65,5,7,0,
         0,65,66,3,24,12,0,66,7,1,0,0,0,67,68,5,1,0,0,68,69,5,10,0,0,69,70,
-        3,24,12,0,70,71,5,11,0,0,71,9,1,0,0,0,72,73,5,2,0,0,73,74,5,10,0,
-        0,74,75,3,24,12,0,75,76,5,11,0,0,76,11,1,0,0,0,77,78,5,36,0,0,78,
+        5,36,0,0,70,71,5,11,0,0,71,9,1,0,0,0,72,73,5,2,0,0,73,74,5,10,0,
+        0,74,75,5,36,0,0,75,76,5,11,0,0,76,11,1,0,0,0,77,78,5,36,0,0,78,
         87,5,10,0,0,79,84,3,24,12,0,80,81,5,8,0,0,81,83,3,24,12,0,82,80,
         1,0,0,0,83,86,1,0,0,0,84,82,1,0,0,0,84,85,1,0,0,0,85,88,1,0,0,0,
         86,84,1,0,0,0,87,79,1,0,0,0,87,88,1,0,0,0,88,89,1,0,0,0,89,90,5,
@@ -477,9 +477,8 @@ class DallasParser ( Parser ):
         def LPAREN(self):
             return self.getToken(DallasParser.LPAREN, 0)
 
-        def expression(self):
-            return self.getTypedRuleContext(DallasParser.ExpressionContext,0)
-
+        def ID(self):
+            return self.getToken(DallasParser.ID, 0)
 
         def RPAREN(self):
             return self.getToken(DallasParser.RPAREN, 0)
@@ -509,7 +508,7 @@ class DallasParser ( Parser ):
             self.state = 68
             self.match(DallasParser.LPAREN)
             self.state = 69
-            self.expression()
+            self.match(DallasParser.ID)
             self.state = 70
             self.match(DallasParser.RPAREN)
         except RecognitionException as re:
@@ -534,9 +533,8 @@ class DallasParser ( Parser ):
         def LPAREN(self):
             return self.getToken(DallasParser.LPAREN, 0)
 
-        def expression(self):
-            return self.getTypedRuleContext(DallasParser.ExpressionContext,0)
-
+        def ID(self):
+            return self.getToken(DallasParser.ID, 0)
 
         def RPAREN(self):
             return self.getToken(DallasParser.RPAREN, 0)
@@ -566,7 +564,7 @@ class DallasParser ( Parser ):
             self.state = 73
             self.match(DallasParser.LPAREN)
             self.state = 74
-            self.expression()
+            self.match(DallasParser.ID)
             self.state = 75
             self.match(DallasParser.RPAREN)
         except RecognitionException as re:
