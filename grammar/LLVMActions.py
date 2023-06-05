@@ -67,6 +67,7 @@ class LLVMActions(DallasListener):
         ID = ctx.ID()
         if ID is not None:
             ID = ID.getText()
+            print('print' + ID)
             v = self.local_vars.get(ID)
             if v is not None:
                 if v.type == VarType.INT:
@@ -137,10 +138,6 @@ class LLVMActions(DallasListener):
         ID = ctx.ID().getText()
         v = self.stack.pop()
 
-        print('assign')
-        print(ID)
-        print(v)
-
         if hasattr(self.local_vars, ID):
             error(ctx.getRuleIndex(), "unknown variable ")
             return
@@ -166,9 +163,8 @@ class LLVMActions(DallasListener):
 
     # Exit a parse tree produced by DallasParser#additiveExpression.
     def exitAdditiveExpression(self, ctx:DallasParser.AdditiveExpressionContext):
-        print("ctx:");
+        print("exitAdditiveExpression:");
         print(ctx);
-        print("stack:")
         v1 = self.stack.pop()
         print(v1.type);
         addition = ctx.PLUS()
@@ -248,15 +244,13 @@ class LLVMActions(DallasListener):
     #     LLVMGenerator.icmp(self.set_variable(ID, VarType.INT), INT)
 
     def exitValue(self, ctx:DallasParser.ValueContext):
-        print('value')
         if ctx.ID() is not None:
             ID = ctx.ID().getText()
             if ID in self.local_vars:
                 v = self.local_vars.get(ID)
-                loadType(v.type, "%" + ID)
-                self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), v.type, v.length));
+                loadType(v.type, ID)
+                self.stack.append(Value(ID, v.type, v.length));
             else:
-                print(ID)
                 error(ctx.getRuleIndex(), f"unknown variable {ID}")
 
         if ctx.INT() is not None:
@@ -264,8 +258,6 @@ class LLVMActions(DallasListener):
         if ctx.FLOAT() is not None:
             self.stack.append(Value(ctx.FLOAT().getText(), VarType.FLOAT, 0))
         if ctx.STRING() is not None:
-            tmp = ctx.STRING().getText();
-            print('string value:'+ tmp)
             self.stack.append(Value(ctx.STRING().getText(), VarType.STRING, 0))
         if ctx.BOOL() is not None:
             self.stack.append(Value(ctx.BOOL().getText(), VarType.BOOLEAN, 0))
