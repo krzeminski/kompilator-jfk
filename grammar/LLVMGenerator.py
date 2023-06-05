@@ -87,6 +87,10 @@ class LLVMGenerator:
         LLVMGenerator.buffer += f"store double {value}, double* {id}\n"
        
     @staticmethod
+    def assign_bool(id, value):
+        LLVMGenerator.buffer += f"store bool {value}, bool* {id}\n"
+
+    @staticmethod
     def assign_string(id):
         LLVMGenerator.buffer += f"store  i8* {LLVMGenerator.reg-1}, i8** {id}\n"
 
@@ -102,6 +106,11 @@ class LLVMGenerator:
     @staticmethod
     def load_double(id):
         LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load double, double* {id}\n"
+        LLVMGenerator.reg += 1
+
+    @staticmethod
+    def load_bool(id):
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load bool, bool* {id}\n"
         LLVMGenerator.reg += 1
 
     @staticmethod
