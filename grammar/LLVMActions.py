@@ -172,15 +172,31 @@ def exitSubstract(self, ctx:DallasParser.SubstractContext):
         error(ctx.getRuleIndex(), "invalid operand types for subtraction operation")
 
     # Exit a parse tree produced by DallasParser#multiply.
-    def exitMultiply(self, ctx:DallasParser.MultiplyContext):
-        v1 = self.stack.pop()
-        v2 = self.stack.pop()
-        if (v1.type == VarType.INT and v2.type == VarType.INT):
-            LLVMGenerator.mul_i32(v1.name, v2.name)
-            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
+def exitMultiply(self, ctx:DallasParser.MultiplyContext):
+    v1 = self.stack.pop()
+    v2 = self.stack.pop()
+    if (v1.type == VarType.INT and v2.type == VarType.INT):
+        LLVMGenerator.mul_i32(v1.name, v2.name)
+        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
+    elif (v1.type == VarType.FLOAT and v2.type == VarType.FLOAT):
+        LLVMGenerator.mul_double(v1.name,v2.name)
+        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
+    elif ((v1.type == VarType.INT and v2.type == VarType.FLOAT) or 
+          (v1.type == VarType.FLOAT and v2.type == VarType.INT)):
+        # For the case when one value is an integer and the other is a float,
+        # we will convert the integer to float and then multiply
+        if v1.type == VarType.INT:
+            LLVMGenerator.sitofp(v1.name)  # convert int to float
+            v1.name = f"%{LLVMGenerator.reg - 1}"
+            v1.type = VarType.FLOAT
         else:
-            LLVMGenerator.mul_double(v1.name,v2.name)
-            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
+            LLVMGenerator.sitofp(v2.name)  # convert int to float
+            v2.name = f"%{LLVMGenerator.reg - 1}"
+            v2.type = VarType.FLOAT
+        LLVMGenerator.mul_double(v1.name,v2.name)
+        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
+    else:
+        error(ctx.getRuleIndex(), "invalid operand types for multiplication operation")
 
     # Exit a parse tree produced by DallasParser#divide.
     def exitDivide(self, ctx:DallasParser.DivideContext):
