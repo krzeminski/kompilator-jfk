@@ -79,6 +79,8 @@ class LLVMActions(DallasListener):
                     LLVMGenerator.printf_string(self.set_variable(ID, v))
                 if v.type == VarType.BOOLEAN:
                     LLVMGenerator.printf_string(self.set_variable(ID, v))
+            else:
+                error(ctx.getRuleIndex(), f"unknown variable {ID}")
         else:
             error(ctx.getRuleIndex(), f"unknown variable {ID}")
 
@@ -93,6 +95,8 @@ class LLVMActions(DallasListener):
             elif v.type == VarType.FLOAT:
                 self.set_variable(ID, Value(ID, VarType.FLOAT, 0))
                 LLVMGenerator.scanf_double(ID)
+            else:
+                error(ctx.getRuleIndex(), f"unknown variable {ID}")
         else:
             error(ctx.getRuleIndex(), f"unknown variable {ID}")
 
