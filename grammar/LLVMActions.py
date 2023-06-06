@@ -40,6 +40,8 @@ class LLVMActions(DallasListener):
     # Exit a parse tree produced by DallasParser#prog.
     def exitProg(self, ctx):
         LLVMGenerator.close_main()
+        with open("output.ll", "w") as file:
+            file.write(LLVMGenerator.generate())
         print(LLVMGenerator.generate())
 
 
@@ -118,112 +120,112 @@ class LLVMActions(DallasListener):
 
     # Exit a parse tree produced by DallasParser#add.
     # Exit a parse tree produced by DallasParser#add.
-def exitAdd(self, ctx:DallasParser.AddContext):
-    v1 = self.stack.pop()
-    v2 = self.stack.pop()
-    if (v1.type == VarType.INT and v2.type == VarType.INT):
-        LLVMGenerator.add_i32(v1.name, v2.name)
-        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
-    elif (v1.type == VarType.FLOAT and v2.type == VarType.FLOAT):
-        LLVMGenerator.add_double(v1.name,v2.name)
-        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
-    elif ((v1.type == VarType.INT and v2.type == VarType.FLOAT) or 
-          (v1.type == VarType.FLOAT and v2.type == VarType.INT)):
-        # For the case when one value is an integer and the other is a float,
-        # we will convert the integer to float and then add
-        if v1.type == VarType.INT:
-            LLVMGenerator.sitofp(v1.name)  # convert int to float
-            v1.name = f"%{LLVMGenerator.reg - 1}"
-            v1.type = VarType.FLOAT
+    def exitAdd(self, ctx:DallasParser.AddContext):
+        v1 = self.stack.pop()
+        v2 = self.stack.pop()
+        if (v1.type == VarType.INT and v2.type == VarType.INT):
+            LLVMGenerator.add_i32(v1.name, v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
+        elif (v1.type == VarType.FLOAT and v2.type == VarType.FLOAT):
+            LLVMGenerator.add_double(v1.name,v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
+        elif ((v1.type == VarType.INT and v2.type == VarType.FLOAT) or 
+            (v1.type == VarType.FLOAT and v2.type == VarType.INT)):
+            # For the case when one value is an integer and the other is a float,
+            # we will convert the integer to float and then add
+            if v1.type == VarType.INT:
+                LLVMGenerator.sitofp(v1.name)  # convert int to float
+                v1.name = f"%{LLVMGenerator.reg - 1}"
+                v1.type = VarType.FLOAT
+            else:
+                LLVMGenerator.sitofp(v2.name)  # convert int to float
+                v2.name = f"%{LLVMGenerator.reg - 1}"
+                v2.type = VarType.FLOAT
+            LLVMGenerator.add_double(v1.name,v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
         else:
-            LLVMGenerator.sitofp(v2.name)  # convert int to float
-            v2.name = f"%{LLVMGenerator.reg - 1}"
-            v2.type = VarType.FLOAT
-        LLVMGenerator.add_double(v1.name,v2.name)
-        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
-    else:
-        error(ctx.getRuleIndex(), "invalid operand types for addition operation")
+            error(ctx.getRuleIndex(), "invalid operand types for addition operation")
 
     # Exit a parse tree produced by DallasParser#substract.
-def exitSubstract(self, ctx:DallasParser.SubstractContext):
-    v1 = self.stack.pop()
-    v2 = self.stack.pop()
-    if (v1.type == VarType.INT and v2.type == VarType.INT):
-        LLVMGenerator.sub_i32(v1.name, v2.name)
-        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
-    elif (v1.type == VarType.FLOAT and v2.type == VarType.FLOAT):
-        LLVMGenerator.sub_double(v1.name,v2.name)
-        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
-    elif ((v1.type == VarType.INT and v2.type == VarType.FLOAT) or 
-          (v1.type == VarType.FLOAT and v2.type == VarType.INT)):
-        # For the case when one value is an integer and the other is a float,
-        # we will convert the integer to float and then subtract
-        if v1.type == VarType.INT:
-            LLVMGenerator.sitofp(v1.name)  # convert int to float
-            v1.name = f"%{LLVMGenerator.reg - 1}"
-            v1.type = VarType.FLOAT
+    def exitSubstract(self, ctx:DallasParser.SubstractContext):
+        v1 = self.stack.pop()
+        v2 = self.stack.pop()
+        if (v1.type == VarType.INT and v2.type == VarType.INT):
+            LLVMGenerator.sub_i32(v1.name, v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
+        elif (v1.type == VarType.FLOAT and v2.type == VarType.FLOAT):
+            LLVMGenerator.sub_double(v1.name,v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
+        elif ((v1.type == VarType.INT and v2.type == VarType.FLOAT) or 
+            (v1.type == VarType.FLOAT and v2.type == VarType.INT)):
+            # For the case when one value is an integer and the other is a float,
+            # we will convert the integer to float and then subtract
+            if v1.type == VarType.INT:
+                LLVMGenerator.sitofp(v1.name)  # convert int to float
+                v1.name = f"%{LLVMGenerator.reg - 1}"
+                v1.type = VarType.FLOAT
+            else:
+                LLVMGenerator.sitofp(v2.name)  # convert int to float
+                v2.name = f"%{LLVMGenerator.reg - 1}"
+                v2.type = VarType.FLOAT
+            LLVMGenerator.sub_double(v1.name,v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
         else:
-            LLVMGenerator.sitofp(v2.name)  # convert int to float
-            v2.name = f"%{LLVMGenerator.reg - 1}"
-            v2.type = VarType.FLOAT
-        LLVMGenerator.sub_double(v1.name,v2.name)
-        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
-    else:
-        error(ctx.getRuleIndex(), "invalid operand types for subtraction operation")
+            error(ctx.getRuleIndex(), "invalid operand types for subtraction operation")
 
     # Exit a parse tree produced by DallasParser#multiply.
-def exitMultiply(self, ctx:DallasParser.MultiplyContext):
-    v1 = self.stack.pop()
-    v2 = self.stack.pop()
-    if (v1.type == VarType.INT and v2.type == VarType.INT):
-        LLVMGenerator.mul_i32(v1.name, v2.name)
-        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
-    elif (v1.type == VarType.FLOAT and v2.type == VarType.FLOAT):
-        LLVMGenerator.mul_double(v1.name,v2.name)
-        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
-    elif ((v1.type == VarType.INT and v2.type == VarType.FLOAT) or 
-          (v1.type == VarType.FLOAT and v2.type == VarType.INT)):
-        # For the case when one value is an integer and the other is a float,
-        # we will convert the integer to float and then multiply
-        if v1.type == VarType.INT:
-            LLVMGenerator.sitofp(v1.name)  # convert int to float
-            v1.name = f"%{LLVMGenerator.reg - 1}"
-            v1.type = VarType.FLOAT
+    def exitMultiply(self, ctx:DallasParser.MultiplyContext):
+        v1 = self.stack.pop()
+        v2 = self.stack.pop()
+        if (v1.type == VarType.INT and v2.type == VarType.INT):
+            LLVMGenerator.mul_i32(v1.name, v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
+        elif (v1.type == VarType.FLOAT and v2.type == VarType.FLOAT):
+            LLVMGenerator.mul_double(v1.name,v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
+        elif ((v1.type == VarType.INT and v2.type == VarType.FLOAT) or 
+            (v1.type == VarType.FLOAT and v2.type == VarType.INT)):
+            # For the case when one value is an integer and the other is a float,
+            # we will convert the integer to float and then multiply
+            if v1.type == VarType.INT:
+                LLVMGenerator.sitofp(v1.name)  # convert int to float
+                v1.name = f"%{LLVMGenerator.reg - 1}"
+                v1.type = VarType.FLOAT
+            else:
+                LLVMGenerator.sitofp(v2.name)  # convert int to float
+                v2.name = f"%{LLVMGenerator.reg - 1}"
+                v2.type = VarType.FLOAT
+            LLVMGenerator.mul_double(v1.name,v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
         else:
-            LLVMGenerator.sitofp(v2.name)  # convert int to float
-            v2.name = f"%{LLVMGenerator.reg - 1}"
-            v2.type = VarType.FLOAT
-        LLVMGenerator.mul_double(v1.name,v2.name)
-        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
-    else:
-        error(ctx.getRuleIndex(), "invalid operand types for multiplication operation")
+            error(ctx.getRuleIndex(), "invalid operand types for multiplication operation")
 
     # Exit a parse tree produced by DallasParser#divide.
-def exitDivide(self, ctx:DallasParser.DivideContext):
-    v1 = self.stack.pop()
-    v2 = self.stack.pop()
-    if (v1.type == VarType.INT and v2.type == VarType.INT):
-        LLVMGenerator.div_i32(v1.name, v2.name)
-        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
-    elif (v1.type == VarType.FLOAT and v2.type == VarType.FLOAT):
-        LLVMGenerator.div_double(v1.name,v2.name)
-        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
-    elif ((v1.type == VarType.INT and v2.type == VarType.FLOAT) or 
-          (v1.type == VarType.FLOAT and v2.type == VarType.INT)):
-        # For the case when one value is an integer and the other is a float,
-        # we will convert the integer to float and then divide
-        if v1.type == VarType.INT:
-            LLVMGenerator.sitofp(v1.name)  # convert int to float
-            v1.name = f"%{LLVMGenerator.reg - 1}"
-            v1.type = VarType.FLOAT
+    def exitDivide(self, ctx:DallasParser.DivideContext):
+        v1 = self.stack.pop()
+        v2 = self.stack.pop()
+        if (v1.type == VarType.INT and v2.type == VarType.INT):
+            LLVMGenerator.div_i32(v1.name, v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
+        elif (v1.type == VarType.FLOAT and v2.type == VarType.FLOAT):
+            LLVMGenerator.div_double(v1.name,v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
+        elif ((v1.type == VarType.INT and v2.type == VarType.FLOAT) or 
+            (v1.type == VarType.FLOAT and v2.type == VarType.INT)):
+            # For the case when one value is an integer and the other is a float,
+            # we will convert the integer to float and then divide
+            if v1.type == VarType.INT:
+                LLVMGenerator.sitofp(v1.name)  # convert int to float
+                v1.name = f"%{LLVMGenerator.reg - 1}"
+                v1.type = VarType.FLOAT
+            else:
+                LLVMGenerator.sitofp(v2.name)  # convert int to float
+                v2.name = f"%{LLVMGenerator.reg - 1}"
+                v2.type = VarType.FLOAT
+            LLVMGenerator.div_double(v1.name,v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
         else:
-            LLVMGenerator.sitofp(v2.name)  # convert int to float
-            v2.name = f"%{LLVMGenerator.reg - 1}"
-            v2.type = VarType.FLOAT
-        LLVMGenerator.div_double(v1.name,v2.name)
-        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
-    else:
-        error(ctx.getRuleIndex(), "invalid operand types for division operation")
+            error(ctx.getRuleIndex(), "invalid operand types for division operation")
 
 
     # Exit a parse tree produced by DallasParser#unaryExpression.
