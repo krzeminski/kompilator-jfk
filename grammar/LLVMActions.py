@@ -145,15 +145,31 @@ def exitAdd(self, ctx:DallasParser.AddContext):
         error(ctx.getRuleIndex(), "invalid operand types for addition operation")
 
     # Exit a parse tree produced by DallasParser#substract.
-    def exitSubstract(self, ctx:DallasParser.SubstractContext):
-        v1 = self.stack.pop()
-        v2 = self.stack.pop()
-        if (v1.type == VarType.INT and v2.type == VarType.INT):
-            LLVMGenerator.sub_i32(v1.name, v2.name)
-            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
+def exitSubstract(self, ctx:DallasParser.SubstractContext):
+    v1 = self.stack.pop()
+    v2 = self.stack.pop()
+    if (v1.type == VarType.INT and v2.type == VarType.INT):
+        LLVMGenerator.sub_i32(v1.name, v2.name)
+        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
+    elif (v1.type == VarType.FLOAT and v2.type == VarType.FLOAT):
+        LLVMGenerator.sub_double(v1.name,v2.name)
+        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
+    elif ((v1.type == VarType.INT and v2.type == VarType.FLOAT) or 
+          (v1.type == VarType.FLOAT and v2.type == VarType.INT)):
+        # For the case when one value is an integer and the other is a float,
+        # we will convert the integer to float and then subtract
+        if v1.type == VarType.INT:
+            LLVMGenerator.sitofp(v1.name)  # convert int to float
+            v1.name = f"%{LLVMGenerator.reg - 1}"
+            v1.type = VarType.FLOAT
         else:
-            LLVMGenerator.sub_double(v1.name, v2.name)
-            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
+            LLVMGenerator.sitofp(v2.name)  # convert int to float
+            v2.name = f"%{LLVMGenerator.reg - 1}"
+            v2.type = VarType.FLOAT
+        LLVMGenerator.sub_double(v1.name,v2.name)
+        self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
+    else:
+        error(ctx.getRuleIndex(), "invalid operand types for subtraction operation")
 
     # Exit a parse tree produced by DallasParser#multiply.
     def exitMultiply(self, ctx:DallasParser.MultiplyContext):
