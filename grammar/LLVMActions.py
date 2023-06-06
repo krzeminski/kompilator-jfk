@@ -67,7 +67,6 @@ class LLVMActions(DallasListener):
         ID = ctx.ID()
         if ID is not None:
             ID = ID.getText()
-            print('print' + ID)
             v = self.local_vars.get(ID)
             if v is not None:
                 if v.type == VarType.INT:
@@ -95,44 +94,6 @@ class LLVMActions(DallasListener):
         else:
             error(ctx.getRuleIndex(), f"unknown variable {ID}")
 
-
-
-    # Enter a parse tree produced by DallasParser#functionCall.
-    def enterFunctionCall(self, ctx:DallasParser.FunctionCallContext):
-        pass
-
-    # Exit a parse tree produced by DallasParser#functionCall.
-    def exitFunctionCall(self, ctx:DallasParser.FunctionCallContext):
-        pass
-
-
-    # Enter a parse tree produced by DallasParser#functionCallOnObject.
-    def enterFunctionCallOnObject(self, ctx:DallasParser.FunctionCallOnObjectContext):
-        pass
-
-    # Exit a parse tree produced by DallasParser#functionCallOnObject.
-    def exitFunctionCallOnObject(self, ctx:DallasParser.FunctionCallOnObjectContext):
-        pass
-
-
-    # Enter a parse tree produced by DallasParser#functionCallOnString.
-    def enterFunctionCallOnString(self, ctx:DallasParser.FunctionCallOnStringContext):
-        pass
-
-    # Exit a parse tree produced by DallasParser#functionCallOnString.
-    def exitFunctionCallOnString(self, ctx:DallasParser.FunctionCallOnStringContext):
-        pass
-
-
-    # Enter a parse tree produced by DallasParser#array.
-    def enterArray(self, ctx:DallasParser.ArrayContext):
-        pass
-
-    # Exit a parse tree produced by DallasParser#array.
-    def exitArray(self, ctx:DallasParser.ArrayContext):
-        pass
-
-
     # Exit a parse tree produced by DallasParser#assignment.
     def exitAssignment(self, ctx:DallasParser.AssignmentContext):
         ID = ctx.ID().getText()
@@ -155,67 +116,49 @@ class LLVMActions(DallasListener):
             error(ctx.getRuleIndex(), "unknown variable " + ID)
             return
 
-
-    # Exit a parse tree produced by DallasParser#expression.
-    def exitExpression(self, ctx:DallasParser.ExpressionContext):
-        pass
-        # next if with logical expressions
-
-    # Exit a parse tree produced by DallasParser#additiveExpression.
-    def exitAdditiveExpression(self, ctx:DallasParser.AdditiveExpressionContext):
-        print("exitAdditiveExpression:");
-        print(ctx);
-        v1 = self.stack.pop()
-        print(v1.type);
-        addition = ctx.PLUS()
-        substraction = ctx.MINUS()
-        print(addition);
-        print(substraction);
-        v2 = self.stack.pop()
-        if v1.type == v2.type:
-            if v1.type == VarType.INT:
-                if addition is not None:
-                    LLVMGenerator.add_i32(v1.name, v2.name)
-                if substraction is not None:
-                    LLVMGenerator.sub_i32(v1.name, v2.name)
-                self.stack.push(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.INT, 0))
-            if v1.type == VarType.FLOAT:
-                if addition is not None:
-                    LLVMGenerator.add_double(v1.name, v2.name)
-                if substraction is not None:
-                    LLVMGenerator.sub_double(v1.name, v2.name)
-                self.stack.push(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.FLOAT, 0))
-        else:
-            if addition is not None:
-                error(ctx.getRuleIndex(), "addition type mismatch")
-            if substraction is not None:
-                error(ctx.getRuleIndex(), "substraction type mismatch")
-
-
-    # Exit a parse tree produced by DallasParser#multiplicativeExpression.
-    def exitMultiplicativeExpression(self, ctx:DallasParser.MultiplicativeExpressionContext):
+    # Exit a parse tree produced by DallasParser#add.
+    def exitAdd(self, ctx:DallasParser.AddContext):
         v1 = self.stack.pop()
         v2 = self.stack.pop()
-        multiplication = ctx.ASTERISK()
-        division = ctx.SLASH()
-        if v1.type == v2.type:
-            if v1.type == VarType.INT:
-                if multiplication is not None:
-                    LLVMGenerator.mul_i32(v1.name, v2.name)
-                if division is not None:
-                    LLVMGenerator.div_i32(v1.name, v2.name)
-                self.stack.push(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.INT, 0))
-            if v1.type == VarType.FLOAT:
-                if multiplication is not None:
-                    LLVMGenerator.mul_double(v1.name, v2.name)
-                if division is not None:
-                    LLVMGenerator.div_double(v1.name, v2.name)
-                self.stack.push(Value(f"%{LLVMGenerator.main_tmp-1}", VarType.FLOAT, 0))
+        if (v1.type == VarType.INT and v2.type == VarType.INT):
+            LLVMGenerator.add_i32(v1.name, v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
         else:
-            if multiplication is not None:
-                error(ctx.getRuleIndex(), "multiplication type mismatch")
-            if division is not None:
-                error(ctx.getRuleIndex(), "division type mismatch")
+            LLVMGenerator.add_double(v1.name,v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
+
+    # Exit a parse tree produced by DallasParser#substract.
+    def exitSubstract(self, ctx:DallasParser.SubstractContext):
+        v1 = self.stack.pop()
+        v2 = self.stack.pop()
+        if (v1.type == VarType.INT and v2.type == VarType.INT):
+            LLVMGenerator.sub_i32(v1.name, v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
+        else:
+            LLVMGenerator.sub_double(v1.name, v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
+
+    # Exit a parse tree produced by DallasParser#multiply.
+    def exitMultiply(self, ctx:DallasParser.MultiplyContext):
+        v1 = self.stack.pop()
+        v2 = self.stack.pop()
+        if (v1.type == VarType.INT and v2.type == VarType.INT):
+            LLVMGenerator.mul_i32(v1.name, v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
+        else:
+            LLVMGenerator.mul_double(v1.name,v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
+
+    # Exit a parse tree produced by DallasParser#divide.
+    def exitDivide(self, ctx:DallasParser.DivideContext):
+        v1 = self.stack.pop()
+        v2 = self.stack.pop()
+        if (v1.type == VarType.INT and v2.type == VarType.INT):
+            LLVMGenerator.div_i32(v1.name, v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.INT, 0))
+        else:
+            LLVMGenerator.div_double(v1.name,v2.name)
+            self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
 
 
     # Exit a parse tree produced by DallasParser#unaryExpression.
@@ -242,6 +185,20 @@ class LLVMActions(DallasListener):
     #     ID = ctx.ID()
     #     INT = ctx.INT()
     #     LLVMGenerator.icmp(self.set_variable(ID, VarType.INT), INT)
+
+    # Exit a parse tree produced by DallasParser#toInt.
+    def exitToInt(self, ctx:DallasParser.ToIntContext):
+        v = self.stack.pop()
+        LLVMGenerator.fptosi(v.name)
+        self.stack.push(Value(f"%{LLVMGenerator.reg - 1}", VarType.INT))
+
+    
+    # Exit a parse tree produced by DallasParser#toFloat.
+    def exitToFloat(self, ctx:DallasParser.ToFloatContext):
+        v = self.stack.pop()
+        LLVMGenerator.sitofp(v.name)
+        self.stack.push(Value(f"%{LLVMGenerator.reg - 1}", VarType.FLOAT))
+
 
     def exitValue(self, ctx:DallasParser.ValueContext):
         if ctx.ID() is not None:

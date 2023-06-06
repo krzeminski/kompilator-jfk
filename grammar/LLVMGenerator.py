@@ -190,6 +190,16 @@ class LLVMGenerator:
         LLVMGenerator.reg += 1
 
     @staticmethod
+    def sitofp(id):
+        LLVMGenerator.main_text += f"%{LLVMGenerator.reg} = sitofp i32 %{id} to double\n"
+        LLVMGenerator.reg += 1
+
+    @staticmethod
+    def fptosi(id):
+        LLVMGenerator.main_text += f"%{LLVMGenerator.reg} = fptosi double %{id} to i32\n"
+        LLVMGenerator.reg += 1
+
+    @staticmethod
     def close_main():
         LLVMGenerator.main_text += LLVMGenerator.buffer
     
