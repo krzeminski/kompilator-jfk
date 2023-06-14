@@ -10,6 +10,6 @@ bool1 = true;
 string1 = "Hello World";
 read(int2);
 print(string1);
-float float3;
+float - float3;
 float3 = float1 * 2 - 3;
 print(float3);

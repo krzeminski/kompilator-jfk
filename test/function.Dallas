@@ -1,0 +1,10 @@
+int function getSum (int a, int b){
+    int c = a + b;
+    print(c);
+    return c;
+} 
+int d = 0;
+int e = 5;
+
+getSum(1,2);
+getSum(d,e);

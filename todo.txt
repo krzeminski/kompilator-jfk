@@ -4,3 +4,78 @@
 3. obsługa stringów
 4. obsługa operacji logicznych (and or)
 5. array declare, assign, alloca input
+
+
+part 2
+
+1. if else (elif nie wymagane)
+```
+x = readfloat()
+
+if x > 5
+    gałąź 1
+else
+    gałąź 2
+end
+```
+pozwala na zdefiniowanie zawsze 2 gałęzi
+nie generuje tylko jednej gałęzi jeśli sprawdzimy pierwszy warunek okaże się poprawny
+warunki do sprawdzania: nierówności i równości: eq, >, <=,  negacja przez else
+
+2. dowolna pętla, może być while
+    bez `break` czy `continue`
+
+3. zasięg zmiennych
+globalne, lokalne w funkcji, klasie, pętli
+self/this i sprawdzać obiekt na którym zostało wywołane
+
+4. funkcje
+w funkcjach zmienne nie powinny być widoczne poza nimi. Mogą korzystać z globalnych
+```
+a = 5;
+func int name(a: int, b: float)
+ a = 3
+ return a;
+```
+sprawdzić czy funkcja nie ma nazwy z keyword albo czy nie nadpisuje jakichś ważnych zmiennych 
+
+rozszerzenia
+1. struktury
+```
+ struct Foo {
+    int a;
+    float b;
+ }
+
+ f = Foo(4,2.3);
+ f.b;
+```
+nie trzeba obsługiwać tego w funkcjach, powinno się móc korzystać z globalnych zmiennych, 
+
+2. klasy
+structura z metodami
+nie musi obsługiwać zmiennych ze strukturami
+
+3. dynamiczne typowanie - najlepiej wtedy wszystkie zmienne na dynamicznych
+```
+a = 3;
+b = readInt()
+if b > 10
+    a =3.5
+a = 3.5
+end
+print(a)
+```
+proste rozwiązanie:
+```
+a = Box(int, 3);
+a = Box(float, 3.5);
+```
+kod zaglądający do pudełka jest w llvm
+
+4. generatory - funkcje utrzymujące swój stan
+```
+def func ()
+    for i in range(5)
+        yield(i)
+```

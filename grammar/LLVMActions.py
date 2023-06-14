@@ -28,6 +28,7 @@ class Value:
 class LLVMActions(DallasListener):
     def __init__(self):
         self.local_vars = {}
+        self.global_vars = {}
         self.stack = deque()
         self.global_ = None
 
@@ -107,7 +108,6 @@ class LLVMActions(DallasListener):
 
         if hasattr(self.local_vars, ID):
             error(ctx.getRuleIndex(), "unknown variable ")
-            return
         if v.type == VarType.INT:
             LLVMGenerator.assign_i32(self.set_variable(ID, v), v.name)
         if v.type == VarType.FLOAT:
@@ -120,7 +120,6 @@ class LLVMActions(DallasListener):
             LLVMGenerator.assign_array(self.set_variable(ID, v), v.name)
         if v.type == VarType.UNKNOWN:
             error(ctx.getRuleIndex(), "unknown variable " + ID)
-            return
 
     # Exit a parse tree produced by DallasParser#add.
     # Exit a parse tree produced by DallasParser#add.
@@ -230,11 +229,6 @@ class LLVMActions(DallasListener):
             self.stack.append(Value("%" + str(LLVMGenerator.reg - 1), VarType.FLOAT, 0))
         else:
             error(ctx.getRuleIndex(), "invalid operand types for division operation")
-
-
-    # Exit a parse tree produced by DallasParser#unaryExpression.
-    def exitUnaryExpression(self, ctx:DallasParser.UnaryExpressionContext):
-        pass
 
 
     # Exit a parse tree produced by DallasParser#primaryExpression.

@@ -11,7 +11,7 @@ def main():
 
     tree = parser.prog()
     llvm_actions = LLVMActions()
-
+    
     walker = ParseTreeWalker()
     walker.walk(llvm_actions, tree)
 

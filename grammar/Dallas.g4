@@ -3,6 +3,8 @@ grammar Dallas;
 // Reguły startowe
 prog : (statement SEMI)+ EOF;
 
+block: LCURLY (statement SEMI)* RCURLY;
+
 // Instrukcje
 statement
     : variableDeclaration
@@ -12,6 +14,7 @@ statement
     | functionCall 
     | functionCallOnObject 
     | functionCallOnString 
+    | ifStatement
     ;
 
 variableDeclaration : dataType ID ;
@@ -88,6 +91,28 @@ primaryExpression
     | toFloat expression        #tofloat
     ;
 
+// ifStatement: IF condition THEN ifBlock (ELSE condition THEN ifBlock)? ENDIF;
+ifStatement: IF condition ifBlock (ELSE ifBlock)?;
+condition :  LPAREN comparisonExp RPAREN;
+comparisonExp
+    : value LT value    #lesserThan
+    | value LTE value   #lesserThanEqual
+    | value GT value    #greaterThan
+    | value GTE value   #greaterThanEqual
+    | value EQ value    #isEqual
+    | value NEQ value   #notEqual
+    ;
+
+ifBlock : block;
+
+//function
+functionDefinition: dataType FUNCTION ID LPAREN (variableDeclaration (COMMA variableDeclaration)*)? RPAREN functionBlock;
+
+//loop
+loopTill: LOOP loopBlock TILL loopCondition;
+loopBlock: block;
+loopCondition: condition;
+
 value
     : ID
     | INT
@@ -108,10 +133,26 @@ dataType : INT_KEY
 PRINT:	'print' ;
 READ:	'read' ;
 
+IF: 'if';
+THEN: 'then';
+ELSE: 'else';
+ENDIF: 'eif';
+
+FUNCTION: 'function';
+functionBlock: block;
+
+LOOP: 'loop';
+TILL: 'till';
+
 AND : '&&' ;
 OR : '||' ;
 XOR : '^^' ;
 EQ : '==' ;
+NEQ : '!=' ;
+GT: '>';
+GTE: '>=';
+LT: '<';
+LTE: '<=';
 ASSIGN : '=';
 COMMA : ',' ;
 SEMI : ';' ;

@@ -28,5 +28,9 @@ store i32 %7, i32* %x
 store double %12, double* %y
 %13 = load double, double* %y
 %14 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double %13)
+%str1 = alloca i8
+store  i8* 14, i8** %str1
+%15 = load i8*, i8** %str1
+%16 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double %15)
   ret i32 0
 }
