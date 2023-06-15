@@ -7,30 +7,15 @@ declare i32 @scanf(i8*, ...)
 @strsd = constant [4 x i8] c"%lf\00"
 
 define i32 @main() nounwind {
-%a = alloca double
-%1 = fmul double 3.1, 2.5
-store double %1, double* %a
-%2 = load double, double* %a
-%3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double %2)
-%b = alloca i32
-%4 = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @strsi, i32 0, i32 0), i32* %b)
-%5 = load i32, i32* %b
+%d = alloca i32
+store i32 0, i32* %%d
+%e = alloca i32
+store i32 5, i32* %%e
+%1 = load i32, i32* %%d
+%2 = load i32, i32* %%e
+%3 = load i32, i32* %%
+%4 = icmp eq i32 %3,VarType.INT
+%5 = load i32, i32* %%e
 %6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i32 %5)
-%x = alloca i32
-%7 = mul i32 8, 5
-store i32 %7, i32* %x
-%8 = load i32, i32* %x
-%9 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i32 %8)
-%y = alloca double
-%10 = fadd double 3.9, 5.1
-%11 = fmul double 5.0, %10
-%12 = fadd double 4.0, %11
-store double %12, double* %y
-%13 = load double, double* %y
-%14 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double %13)
-%str1 = alloca i8
-store  i8* 14, i8** %str1
-%15 = load i8*, i8** %str1
-%16 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double %15)
   ret i32 0
 }

@@ -35,7 +35,7 @@ class LLVMActions(DallasListener):
 
     # Enter a parse tree produced by DallasParser#prog.
     def enterProg(self, ctx:DallasParser.ProgContext):
-        self.global_ = True
+        self.global_ = False
 
 
     # Exit a parse tree produced by DallasParser#prog.
@@ -73,13 +73,13 @@ class LLVMActions(DallasListener):
             v = self.local_vars.get(ID)
             if v is not None:
                 if v.type == VarType.INT:
-                    LLVMGenerator.printf_i32(self.set_variable(ID, v))
+                    LLVMGenerator.printf_i32(setVariable(self, ID, v))
                 if v.type == VarType.FLOAT:
-                    LLVMGenerator.printf_double(self.set_variable(ID, v))
+                    LLVMGenerator.printf_double(setVariable(self, ID, v))
                 if v.type == VarType.STRING:
-                    LLVMGenerator.printf_string(self.set_variable(ID, v))
+                    LLVMGenerator.printf_string(setVariable(self, ID, v))
                 if v.type == VarType.BOOLEAN:
-                    LLVMGenerator.printf_string(self.set_variable(ID, v))
+                    LLVMGenerator.printf_string(setVariable(self, ID, v))
             else:
                 error(ctx.getRuleIndex(), f"unknown variable {ID}")
         else:
@@ -91,10 +91,10 @@ class LLVMActions(DallasListener):
         if ID in self.local_vars:
             v = self.local_vars.get(ID)
             if v.type == VarType.INT:
-                self.set_variable(ID, Value(ID, VarType.INT, 0))
+                setVariable(self, ID, Value(ID, VarType.INT, 0))
                 LLVMGenerator.scanf_i32(ID)
             elif v.type == VarType.FLOAT:
-                self.set_variable(ID, Value(ID, VarType.FLOAT, 0))
+                setVariable(self, ID, Value(ID, VarType.FLOAT, 0))
                 LLVMGenerator.scanf_double(ID)
             else:
                 error(ctx.getRuleIndex(), f"unknown variable {ID}")
@@ -109,15 +109,15 @@ class LLVMActions(DallasListener):
         if hasattr(self.local_vars, ID):
             error(ctx.getRuleIndex(), "unknown variable ")
         if v.type == VarType.INT:
-            LLVMGenerator.assign_i32(self.set_variable(ID, v), v.name)
+            LLVMGenerator.assign_i32(setVariable(self, ID, v), v.name)
         if v.type == VarType.FLOAT:
-            LLVMGenerator.assign_double(self.set_variable(ID, v), v.name)
+            LLVMGenerator.assign_double(setVariable(self, ID, v), v.name)
         if v.type == VarType.STRING:
-            LLVMGenerator.assign_string(self.set_variable(ID, v))
+            LLVMGenerator.assign_string(setVariable(self, ID, v))
         if v.type == VarType.BOOLEAN:
-            LLVMGenerator.assign_bool(self.set_variable(ID, v), v.name)
+            LLVMGenerator.assign_bool(setVariable(self, ID, v), v.name)
         if v.type == VarType.ARRAY:
-            LLVMGenerator.assign_array(self.set_variable(ID, v), v.name)
+            LLVMGenerator.assign_array(setVariable(self, ID, v), v.name)
         if v.type == VarType.UNKNOWN:
             error(ctx.getRuleIndex(), "unknown variable " + ID)
 
@@ -249,31 +249,39 @@ class LLVMActions(DallasListener):
     # def exitEqual(self, ctx):
     #     ID = ctx.ID()
     #     INT = ctx.INT()
-    #     LLVMGenerator.icmp(self.set_variable(ID, VarType.INT), INT)
+    #     LLVMGenerator.icmp(setVariable(self, ID, VarType.INT), INT)
+
+    # Exit a parse tree produced by DallasParser#isEqual.
+    def exitIsEqual(self, ctx:DallasParser.IsEqualContext):
+        v1 = self.stack.pop()
+        v2 = self.stack.pop()
+        print('exitEq')
+        print(v1)
+        print(v2)
+        scopedId, v = getVariable(self, v1.name, ctx.getRuleIndex())[0]
+        LLVMGenerator.icmp(scopedId, v1.type)
+
 
     # Exit a parse tree produced by DallasParser#toInt.
     def exitToInt(self, ctx:DallasParser.ToIntContext):
         v = self.stack.pop()
         LLVMGenerator.fptosi(v.name)
-        self.stack.push(Value(f"%{LLVMGenerator.reg - 1}", VarType.INT))
+        self.stack.append(Value(f"%{LLVMGenerator.reg - 1}", VarType.INT))
 
     
     # Exit a parse tree produced by DallasParser#toFloat.
     def exitToFloat(self, ctx:DallasParser.ToFloatContext):
         v = self.stack.pop()
         LLVMGenerator.sitofp(v.name)
-        self.stack.push(Value(f"%{LLVMGenerator.reg - 1}", VarType.FLOAT))
+        self.stack.append(Value(f"%{LLVMGenerator.reg - 1}", VarType.FLOAT))
 
 
     def exitValue(self, ctx:DallasParser.ValueContext):
         if ctx.ID() is not None:
             ID = ctx.ID().getText()
-            if ID in self.local_vars:
-                v = self.local_vars.get(ID)
-                loadType(v.type, ID)
-                self.stack.append(Value(ID, v.type, v.length));
-            else:
-                error(ctx.getRuleIndex(), f"unknown variable {ID}")
+            scopedId, v = getVariable(self, ID, ctx.getRuleIndex())
+            loadType(v.type, scopedId)
+            self.stack.append(Value(ID, v.type, v.length))
 
         if ctx.INT() is not None:
             self.stack.append(Value(ctx.INT().getText(), VarType.INT, 0))
@@ -284,13 +292,6 @@ class LLVMActions(DallasListener):
         if ctx.BOOL() is not None:
             self.stack.append(Value(ctx.BOOL().getText(), VarType.BOOLEAN, 0))
 
-
-    def set_variable(self, ID, value):
-        if ID not in self.local_vars:
-            self.local_vars[ID] = value
-            declareType(value, ID)
-        # id = "%" + ID
-        return ID
 
 def error(line, msg):
     print("Error, line " + str(line) + ", " + msg, file=sys.stderr)
@@ -308,14 +309,44 @@ def declareType(type, ID):
     if type == "BOOL":
         LLVMGenerator.declare_bool(ID, False)
 
-def loadType(type, msg):
+# todo: change all those load generators to take ID, this ID already has scope in it
+def loadType(type, scopedID):
     if type == VarType.INT:
-        LLVMGenerator.load_i32(msg)
+        LLVMGenerator.load_i32(scopedID)
     if type == VarType.FLOAT:
-        LLVMGenerator.load_double(msg)
+        LLVMGenerator.load_double(scopedID)
     if type == VarType.STRING:
-        LLVMGenerator.load_string(msg)
+        LLVMGenerator.load_string(scopedID)
     if type == VarType.ARRAY:
-        LLVMGenerator.load_array(msg)
+        LLVMGenerator.load_array(scopedID)
     if type == VarType.BOOLEAN:
-        LLVMGenerator.load_bool(msg)
+        LLVMGenerator.load_bool(scopedID)
+
+def getVariable(self, ID, line):
+    if self.global_:
+        if ID in self.global_vars:
+            return "@" + ID, self.global_vars[ID]
+        else:
+            error(line, "unknown global variable " + ID)
+    else:
+        if ID in self.local_vars:
+            return "%" + ID, self.local_vars[ID]
+        elif ID in self.global_vars:
+            return "@" + ID, self.global_vars[ID]
+        else:
+            error(line, "unknown variable " + ID)
+
+# sprawdź context, zapisz w local/global, zwróć scoped id
+def setVariable(self, ID, value):
+    if self.global_:
+        if ID not in self.global_vars:
+            declareType(value.type, ID)
+        self.global_vars[ID] = value
+        scopedID = "@" + ID
+    else:
+        if ID not in self.local_vars:
+            declareType(value.type, ID)
+        self.local_vars[ID] = value
+        scopedID = "%" + ID
+
+    return scopedID
