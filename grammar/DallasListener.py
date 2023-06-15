@@ -17,6 +17,15 @@ class DallasListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by DallasParser#block.
+    def enterBlock(self, ctx:DallasParser.BlockContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#block.
+    def exitBlock(self, ctx:DallasParser.BlockContext):
+        pass
+
+
     # Enter a parse tree produced by DallasParser#statement.
     def enterStatement(self, ctx:DallasParser.StatementContext):
         pass
@@ -305,6 +314,141 @@ class DallasListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by DallasParser#ifElseStatement.
+    def enterIfElseStatement(self, ctx:DallasParser.IfElseStatementContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#ifElseStatement.
+    def exitIfElseStatement(self, ctx:DallasParser.IfElseStatementContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#ifStatement.
+    def enterIfStatement(self, ctx:DallasParser.IfStatementContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#ifStatement.
+    def exitIfStatement(self, ctx:DallasParser.IfStatementContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#condition.
+    def enterCondition(self, ctx:DallasParser.ConditionContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#condition.
+    def exitCondition(self, ctx:DallasParser.ConditionContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#lesserThan.
+    def enterLesserThan(self, ctx:DallasParser.LesserThanContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#lesserThan.
+    def exitLesserThan(self, ctx:DallasParser.LesserThanContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#lesserThanEqual.
+    def enterLesserThanEqual(self, ctx:DallasParser.LesserThanEqualContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#lesserThanEqual.
+    def exitLesserThanEqual(self, ctx:DallasParser.LesserThanEqualContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#greaterThan.
+    def enterGreaterThan(self, ctx:DallasParser.GreaterThanContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#greaterThan.
+    def exitGreaterThan(self, ctx:DallasParser.GreaterThanContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#greaterThanEqual.
+    def enterGreaterThanEqual(self, ctx:DallasParser.GreaterThanEqualContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#greaterThanEqual.
+    def exitGreaterThanEqual(self, ctx:DallasParser.GreaterThanEqualContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#isEqual.
+    def enterIsEqual(self, ctx:DallasParser.IsEqualContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#isEqual.
+    def exitIsEqual(self, ctx:DallasParser.IsEqualContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#notEqual.
+    def enterNotEqual(self, ctx:DallasParser.NotEqualContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#notEqual.
+    def exitNotEqual(self, ctx:DallasParser.NotEqualContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#ifBlock.
+    def enterIfBlock(self, ctx:DallasParser.IfBlockContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#ifBlock.
+    def exitIfBlock(self, ctx:DallasParser.IfBlockContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#elseBlock.
+    def enterElseBlock(self, ctx:DallasParser.ElseBlockContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#elseBlock.
+    def exitElseBlock(self, ctx:DallasParser.ElseBlockContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#functionDefinition.
+    def enterFunctionDefinition(self, ctx:DallasParser.FunctionDefinitionContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#functionDefinition.
+    def exitFunctionDefinition(self, ctx:DallasParser.FunctionDefinitionContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#loopTill.
+    def enterLoopTill(self, ctx:DallasParser.LoopTillContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#loopTill.
+    def exitLoopTill(self, ctx:DallasParser.LoopTillContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#loopBlock.
+    def enterLoopBlock(self, ctx:DallasParser.LoopBlockContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#loopBlock.
+    def exitLoopBlock(self, ctx:DallasParser.LoopBlockContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#loopCondition.
+    def enterLoopCondition(self, ctx:DallasParser.LoopConditionContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#loopCondition.
+    def exitLoopCondition(self, ctx:DallasParser.LoopConditionContext):
+        pass
+
+
     # Enter a parse tree produced by DallasParser#value.
     def enterValue(self, ctx:DallasParser.ValueContext):
         pass
@@ -320,6 +464,15 @@ class DallasListener(ParseTreeListener):
 
     # Exit a parse tree produced by DallasParser#dataType.
     def exitDataType(self, ctx:DallasParser.DataTypeContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#functionBlock.
+    def enterFunctionBlock(self, ctx:DallasParser.FunctionBlockContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#functionBlock.
+    def exitFunctionBlock(self, ctx:DallasParser.FunctionBlockContext):
         pass
 
 

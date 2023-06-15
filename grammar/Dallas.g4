@@ -11,10 +11,13 @@ statement
     | assignment
     | printCall
     | readCall
+    | ifElseStatement
+    | ifStatement
+    | functionDefinition
     | functionCall 
     | functionCallOnObject 
-    | functionCallOnString 
-    | ifStatement
+    | functionCallOnString
+    | loopTill
     ;
 
 variableDeclaration : dataType ID ;
@@ -92,7 +95,8 @@ primaryExpression
     ;
 
 // ifStatement: IF condition THEN ifBlock (ELSE condition THEN ifBlock)? ENDIF;
-ifStatement: IF condition ifBlock (ELSE ifBlock)?;
+ifElseStatement: IF condition ifBlock ELSE elseBlock;
+ifStatement: IF condition ifBlock;
 condition :  LPAREN comparisonExp RPAREN;
 comparisonExp
     : value LT value    #lesserThan
@@ -104,6 +108,7 @@ comparisonExp
     ;
 
 ifBlock : block;
+elseBlock : block;
 
 //function
 functionDefinition: dataType FUNCTION ID LPAREN (variableDeclaration (COMMA variableDeclaration)*)? RPAREN functionBlock;
@@ -140,6 +145,8 @@ ENDIF: 'eif';
 
 FUNCTION: 'function';
 functionBlock: block;
+// RETURN: 'return';
+// returnStat: RETURN expression SEMI;
 
 LOOP: 'loop';
 TILL: 'till';
