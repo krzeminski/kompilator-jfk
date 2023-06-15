@@ -46,7 +46,7 @@ class LLVMActions(DallasListener):
         print(LLVMGenerator.generate())
 
 
-    # Exit a parse tree produced by DallasParser#variableDeclaration. test czy moge pushowac
+    # Exit a parse tree produced by DallasParser#variableDeclaration.
     def exitVariableDeclaration(self, ctx:DallasParser.VariableDeclarationContext):
         ID = ctx.ID().getText()
         if ctx.dataType().INT_KEY() is not None:
