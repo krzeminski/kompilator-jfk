@@ -422,12 +422,21 @@ class DallasListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by DallasParser#loopTill.
-    def enterLoopTill(self, ctx:DallasParser.LoopTillContext):
+    # Enter a parse tree produced by DallasParser#loopTimes.
+    def enterLoopTimes(self, ctx:DallasParser.LoopTimesContext):
         pass
 
-    # Exit a parse tree produced by DallasParser#loopTill.
-    def exitLoopTill(self, ctx:DallasParser.LoopTillContext):
+    # Exit a parse tree produced by DallasParser#loopTimes.
+    def exitLoopTimes(self, ctx:DallasParser.LoopTimesContext):
+        pass
+
+
+    # Enter a parse tree produced by DallasParser#repetitions.
+    def enterRepetitions(self, ctx:DallasParser.RepetitionsContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#repetitions.
+    def exitRepetitions(self, ctx:DallasParser.RepetitionsContext):
         pass
 
 
@@ -437,15 +446,6 @@ class DallasListener(ParseTreeListener):
 
     # Exit a parse tree produced by DallasParser#loopBlock.
     def exitLoopBlock(self, ctx:DallasParser.LoopBlockContext):
-        pass
-
-
-    # Enter a parse tree produced by DallasParser#loopCondition.
-    def enterLoopCondition(self, ctx:DallasParser.LoopConditionContext):
-        pass
-
-    # Exit a parse tree produced by DallasParser#loopCondition.
-    def exitLoopCondition(self, ctx:DallasParser.LoopConditionContext):
         pass
 
 

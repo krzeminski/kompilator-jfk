@@ -2,7 +2,8 @@ class LLVMGenerator:
     header_text = ""
     main_text = ""
     reg = 1
-    str = 1
+    str = 1 #string
+    br = 0
     buffer = ""
     brstack = []
 
@@ -62,29 +63,54 @@ class LLVMGenerator:
         LLVMGenerator.buffer += f"false{b}:\n"
 
     @staticmethod
-    def icmp(id,value):
-        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i32, i32* %{id}\n"
+    def icmp(id, value, comparison = 'eq'):
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i32, i32* {id}\n"
         LLVMGenerator.reg += 1
-        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = icmp eq i32 %{LLVMGenerator.reg-1},{value}\n"
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = icmp {comparison} i32 %{LLVMGenerator.reg-1},{value}\n"
+        LLVMGenerator.reg += 1
+
+    @staticmethod
+    def icmp_id(id1, id2, comparison = 'eq'):
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i32, i32* {id1}\n"
+        LLVMGenerator.reg += 1
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i32, i32* {id2}\n"
+        LLVMGenerator.reg += 1
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = icmp {comparison} i32 {LLVMGenerator.reg-2},{LLVMGenerator.reg-1}\n"
+        LLVMGenerator.reg += 1
+
+    @staticmethod
+    def fcmp(id, value, comparison = 'oeq'):
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load double, double* {id}\n"
+        LLVMGenerator.reg += 1
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = fcmp {comparison} double %{LLVMGenerator.reg-1},{value}\n"
+        LLVMGenerator.reg += 1
+
+    @staticmethod
+    def fcmp_id(id1, id2, comparison = 'oeq'):
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load double, double* {id1}\n"
+        LLVMGenerator.reg += 1
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load double, double* {id2}\n"
+        LLVMGenerator.reg += 1
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = fcmp {comparison} double {LLVMGenerator.reg-2},{LLVMGenerator.reg-1}\n"
         LLVMGenerator.reg += 1
 
     @staticmethod
     def printf_i32(id):
-        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i32, i32* %{id}\n"
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i32, i32* {id}\n"
         LLVMGenerator.reg += 1
         LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i32 %{LLVMGenerator.reg-1})\n"
         LLVMGenerator.reg += 1
     
     @staticmethod
     def printf_double(id):
-        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load double, double* %{id}\n"
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load double, double* {id}\n"
         LLVMGenerator.reg += 1
         LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double %{LLVMGenerator.reg-1})\n"
         LLVMGenerator.reg += 1
 
     @staticmethod
     def printf_string(id):
-        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i8*, i8** %{id}\n"
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i8*, i8** {id}\n"
         LLVMGenerator.reg += 1
         LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double %{LLVMGenerator.reg-1})\n"
         LLVMGenerator.reg += 1
@@ -137,42 +163,42 @@ class LLVMGenerator:
 
     @staticmethod
     def assign_i32(id, value):
-        LLVMGenerator.buffer += f"store i32 {value}, i32* %{id}\n"
+        LLVMGenerator.buffer += f"store i32 {value}, i32* {id}\n"
     
     @staticmethod
     def assign_double(id, value):
-        LLVMGenerator.buffer += f"store double {value}, double* %{id}\n"
+        LLVMGenerator.buffer += f"store double {value}, double* {id}\n"
        
     @staticmethod
     def assign_bool(id, value):
-        LLVMGenerator.buffer += f"store i1 {value}, i1* %{id}\n"
+        LLVMGenerator.buffer += f"store i1 {value}, i1* {id}\n"
 
     @staticmethod
     def assign_string(id):
-        LLVMGenerator.buffer += f"store  i8* {LLVMGenerator.reg-1}, i8** %{id}\n"
+        LLVMGenerator.buffer += f"store  i8* {LLVMGenerator.reg-1}, i8** {id}\n"
 
     @staticmethod
     def assign_array(id, value):
-        LLVMGenerator.buffer += f"store double {value}, double* %{id}\n"
+        LLVMGenerator.buffer += f"store double {value}, double* {id}\n"
        
     @staticmethod
     def load_i32(id):
-        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i32, i32* %{id}\n"
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i32, i32* {id}\n"
         LLVMGenerator.reg += 1
 
     @staticmethod
     def load_double(id):
-        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load double, double* %{id}\n"
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load double, double* {id}\n"
         LLVMGenerator.reg += 1
 
     @staticmethod
     def load_bool(id):
-        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i1, i1* %{id}\n"
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i1, i1* {id}\n"
         LLVMGenerator.reg += 1
 
     @staticmethod
     def load_string(id):
-        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i8*, i8** %{id}\n"
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load i8*, i8** {id}\n"
         LLVMGenerator.reg += 1
 
     @staticmethod
@@ -197,12 +223,12 @@ class LLVMGenerator:
 
     @staticmethod
     def string_pointer(id, l):
-        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = getelementptr inbounds [{l + 1} x i8], [{l + 1} x i8]* %{id}, i64 0, i64 0\n"
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = getelementptr inbounds [{l + 1} x i8], [{l + 1} x i8]* {id}, i64 0, i64 0\n"
         LLVMGenerator.reg += 1
 
     @staticmethod
     def load_array(id):
-        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load double, double* %{id}\n"
+        LLVMGenerator.buffer += f"%{LLVMGenerator.reg} = load double, double* {id}\n"
         LLVMGenerator.reg += 1
 
     @staticmethod
@@ -247,12 +273,12 @@ class LLVMGenerator:
 
     @staticmethod
     def sitofp(id):
-        LLVMGenerator.main_text += f"%{LLVMGenerator.reg} = sitofp i32 %{id} to double\n"
+        LLVMGenerator.main_text += f"%{LLVMGenerator.reg} = sitofp i32 {id} to double\n"
         LLVMGenerator.reg += 1
 
     @staticmethod
     def fptosi(id):
-        LLVMGenerator.main_text += f"%{LLVMGenerator.reg} = fptosi double %{id} to i32\n"
+        LLVMGenerator.main_text += f"%{LLVMGenerator.reg} = fptosi double {id} to i32\n"
         LLVMGenerator.reg += 1
 
     @staticmethod
@@ -262,7 +288,7 @@ class LLVMGenerator:
 
     @staticmethod
     def generate():
-        text = "";
+        text = ""
         text += "declare i32 @printf(i8*, ...)\n"
         text += "declare i32 @scanf(i8*, ...)\n"
         text += "@strpi = constant [4 x i8] c\"%d\\0A\\00\"\n"

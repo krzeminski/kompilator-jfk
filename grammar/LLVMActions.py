@@ -35,7 +35,7 @@ class LLVMActions(DallasListener):
 
     # Enter a parse tree produced by DallasParser#prog.
     def enterProg(self, ctx:DallasParser.ProgContext):
-        self.global_ = False
+        self.global_ = True
 
 
     # Exit a parse tree produced by DallasParser#prog.
@@ -50,64 +50,58 @@ class LLVMActions(DallasListener):
     def exitVariableDeclaration(self, ctx:DallasParser.VariableDeclarationContext):
         ID = ctx.ID().getText()
         if ctx.dataType().INT_KEY() is not None:
-            self.local_vars[ID] = Value(ID, VarType.INT, 0);
-            LLVMGenerator.declare_i32(ID);
+            v = Value(ID, VarType.INT, 0)
         if ctx.dataType().FLOAT_KEY() is not None:
-            self.local_vars[ID] = Value(ID, VarType.FLOAT, 0);
-            LLVMGenerator.declare_double(ID);
+            v = Value(ID, VarType.FLOAT, 0)
         if ctx.dataType().STRING_KEY() is not None:
-            self.local_vars[ID] = Value(ID, VarType.STRING, 0);
-            LLVMGenerator.declare_string(ID);
+            v = Value(ID, VarType.STRING, 0)
         if ctx.dataType().ARRAY_KEY() is not None:
-            self.local_vars[ID] = Value(ID, VarType.ARRAY, 0);
-            LLVMGenerator.declare_array(ID);
+            v = Value(ID, VarType.ARRAY, 0)
         if ctx.dataType().BOOL_KEY() is not None:
-            self.local_vars[ID] = Value(ID, VarType.BOOLEAN, 0);
-            LLVMGenerator.declare_bool(ID);
+            v = Value(ID, VarType.BOOLEAN, 0)
+        if v is None:
+            error(ctx.getRuleIndex(), 'wrong type')
+        setVariable(self, ID, v)
+        
 
     # Exit a parse tree produced by DallasParser#printCall.
     def exitPrintCall(self, ctx:DallasParser.PrintCallContext):
         ID = ctx.ID()
         if ID is not None:
             ID = ID.getText()
-            v = self.local_vars.get(ID)
+            scopedId, v = getVariable(self, ID, ctx.getRuleIndex())
             if v is not None:
                 if v.type == VarType.INT:
-                    LLVMGenerator.printf_i32(setVariable(self, ID, v))
+                    LLVMGenerator.printf_i32(scopedId)
                 if v.type == VarType.FLOAT:
-                    LLVMGenerator.printf_double(setVariable(self, ID, v))
+                    LLVMGenerator.printf_double(scopedId)
                 if v.type == VarType.STRING:
-                    LLVMGenerator.printf_string(setVariable(self, ID, v))
+                    LLVMGenerator.printf_string(scopedId)
                 if v.type == VarType.BOOLEAN:
-                    LLVMGenerator.printf_string(setVariable(self, ID, v))
+                    LLVMGenerator.printf_string(scopedId)
             else:
-                error(ctx.getRuleIndex(), f"unknown variable {ID}")
+                error(ctx.getRuleIndex(), f"Print unknown variable {ID}")
         else:
-            error(ctx.getRuleIndex(), f"unknown variable {ID}")
+            error(ctx.getRuleIndex(), f"Print unknown variable {ID}")
 
     # Exit a parse tree produced by DallasParser#readCall.
     def exitReadCall(self, ctx:DallasParser.ReadCallContext):
         ID = ctx.ID().getText()
-        if ID in self.local_vars:
-            v = self.local_vars.get(ID)
-            if v.type == VarType.INT:
-                setVariable(self, ID, Value(ID, VarType.INT, 0))
-                LLVMGenerator.scanf_i32(ID)
-            elif v.type == VarType.FLOAT:
-                setVariable(self, ID, Value(ID, VarType.FLOAT, 0))
-                LLVMGenerator.scanf_double(ID)
-            else:
-                error(ctx.getRuleIndex(), f"unknown variable {ID}")
+        scopedId, v = getVariable(self, ID, ctx.getRuleIndex())
+
+        if v.type == VarType.INT:
+            LLVMGenerator.scanf_i32(scopedId)
+        elif v.type == VarType.FLOAT:
+            LLVMGenerator.scanf_double(scopedId)
         else:
-            error(ctx.getRuleIndex(), f"unknown variable {ID}")
+            error(ctx.getRuleIndex(), f"unknown variable type {ID}")
+
 
     # Exit a parse tree produced by DallasParser#assignment.
     def exitAssignment(self, ctx:DallasParser.AssignmentContext):
         ID = ctx.ID().getText()
         v = self.stack.pop()
-
-        if hasattr(self.local_vars, ID):
-            error(ctx.getRuleIndex(), "unknown variable ")
+        scopedId, value = getVariable(self, ID, ctx.getRuleIndex())
         if v.type == VarType.INT:
             LLVMGenerator.assign_i32(setVariable(self, ID, v), v.name)
         if v.type == VarType.FLOAT:
@@ -119,7 +113,7 @@ class LLVMActions(DallasListener):
         if v.type == VarType.ARRAY:
             LLVMGenerator.assign_array(setVariable(self, ID, v), v.name)
         if v.type == VarType.UNKNOWN:
-            error(ctx.getRuleIndex(), "unknown variable " + ID)
+            error(ctx.getRuleIndex(), "Assignment unknown variable " + ID)
 
     # Exit a parse tree produced by DallasParser#add.
     # Exit a parse tree produced by DallasParser#add.
@@ -238,11 +232,11 @@ class LLVMActions(DallasListener):
         if ctx.LPAREN() and ctx.RPAREN is True :
             pass
         if ctx.toInt() is not None:
-            v = self.stack.pop();
-            LLVMGenerator.fptosi(v.name);
+            v = self.stack.pop()
+            LLVMGenerator.fptosi(v.name)
             self.stack.append(Value(f"%{LLVMGenerator.reg-1}", VarType.INT, 0))
         if ctx.toFloat() is not None:
-            LLVMGenerator.sitofp(v.name);
+            LLVMGenerator.sitofp(v.name)
             self.stack.append(Value(f"%{LLVMGenerator.reg-1}", VarType.FLOAT, 0))
         pass
 
@@ -251,16 +245,60 @@ class LLVMActions(DallasListener):
     #     INT = ctx.INT()
     #     LLVMGenerator.icmp(setVariable(self, ID, VarType.INT), INT)
 
+    def compare(self, ctx, comparison, fcomparison):
+        ve1 = ctx.ID().getText()
+        ve2 = ctx.value()
+        scopedId1, v1 = getVariable(self, ve1, ctx.getRuleIndex())
+        if ve2.ID() is not None:
+            scopedId2, v2 = getVariable(self, ve2.name, ctx.getRuleIndex())
+            if v2.INT() is not None:
+                LLVMGenerator.icmp_id(scopedId1, scopedId2, comparison)
+            elif v2.FLOAT() is not None:
+                LLVMGenerator.fcmp_id(scopedId1, scopedId2, fcomparison)
+            else:
+                error(ctx.getRuleIndex(), 'wrong type comparison')
+        elif v1.type == VarType.INT and ve2.INT() is not None:
+            LLVMGenerator.icmp(scopedId1, ve2.INT().getText(), comparison)
+        elif v1.type == VarType.FLOAT and ve2.FLOAT() is not None:
+            LLVMGenerator.fcmp(scopedId1, ve2.FLOAT().getText(), fcomparison)
+        else:
+            error(ctx.getRuleIndex(), 'wrong type comparison')
+    
     # Exit a parse tree produced by DallasParser#isEqual.
     def exitIsEqual(self, ctx:DallasParser.IsEqualContext):
-        v1 = self.stack.pop()
-        v2 = self.stack.pop()
-        print('exitEq')
-        print(v1)
-        print(v2)
-        scopedId, v = getVariable(self, v1.name, ctx.getRuleIndex())[0]
-        LLVMGenerator.icmp(scopedId, v1.type)
+        comparison = 'eq'
+        fcomparison = 'oeq'
+        self.compare(ctx, comparison, fcomparison)
 
+    # Exit a parse tree produced by DallasParser#notEqual.
+    def exitNotEqual(self, ctx:DallasParser.NotEqualContext):
+        comparison = 'ne'
+        fcomparison = 'one'
+        self.compare(ctx, comparison, fcomparison)
+
+    # Exit a parse tree produced by DallasParser#lesserThan.
+    def exitLesserThan(self, ctx:DallasParser.LesserThanContext):
+        comparison = 'ult'
+        fcomparison = 'olt'
+        self.compare(ctx, comparison, fcomparison)
+
+    # Exit a parse tree produced by DallasParser#lesserThanEqual.
+    def exitLesserThanEqual(self, ctx:DallasParser.LesserThanEqualContext):
+        comparison = 'ule'
+        fcomparison = 'ole'
+        self.compare(ctx, comparison, fcomparison)
+
+    # Exit a parse tree produced by DallasParser#greaterThan.
+    def exitGreaterThan(self, ctx:DallasParser.GreaterThanContext):
+        comparison = 'ugt'
+        fcomparison = 'ogt'
+        self.compare(ctx, comparison, fcomparison)
+
+    # Exit a parse tree produced by DallasParser#greaterThanEqual.
+    def exitGreaterThanEqual(self, ctx:DallasParser.GreaterThanEqualContext):
+        comparison = 'uge'
+        fcomparison = 'oge'
+        self.compare(ctx, comparison, fcomparison)
 
     # Exit a parse tree produced by DallasParser#toInt.
     def exitToInt(self, ctx:DallasParser.ToIntContext):
@@ -292,22 +330,42 @@ class LLVMActions(DallasListener):
         if ctx.BOOL() is not None:
             self.stack.append(Value(ctx.BOOL().getText(), VarType.BOOLEAN, 0))
 
+    # Enter a parse tree produced by DallasParser#ifBlock.
+    def enterIfBlock(self, ctx:DallasParser.IfBlockContext):
+        LLVMGenerator.ifstart()
+
+    # Exit a parse tree produced by DallasParser#ifBlock.
+    def exitIfBlock(self, ctx:DallasParser.IfBlockContext):
+        LLVMGenerator.ifend()
+
+    # Exit a parse tree produced by DallasParser#repetitions.
+    def exitRepetitions(self, ctx:DallasParser.RepetitionsContext):
+        int = ctx.INT()
+        if int is not None:
+            LLVMGenerator.loopstart(int)
+        else:
+            error(ctx.getRuleIndex, 'wrong number')
+
+    # Exit a parse tree produced by DallasParser#loopBlock.
+    def exitLoopBlock(self, ctx:DallasParser.LoopBlockContext):
+        if isinstance(ctx.parentCtx, DallasParser.LoopTimesContext):
+            LLVMGenerator.loopend()
 
 def error(line, msg):
     print("Error, line " + str(line) + ", " + msg, file=sys.stderr)
     sys.exit(1)
 
-def declareType(type, ID):
+def declareType(type, ID, isGlobal = False):
     if type == "INT":
-        LLVMGenerator.declare_i32(ID, False)
+        LLVMGenerator.declare_i32(ID, isGlobal)
     if type == "FLOAT":
-        LLVMGenerator.declare_double(ID, False)
+        LLVMGenerator.declare_double(ID, isGlobal)
     if type == "STRING":
-        LLVMGenerator.declare_string(ID, False)
+        LLVMGenerator.declare_string(ID, isGlobal)
     if type == "ARRAY":
-        LLVMGenerator.declare_array(ID, False)
+        LLVMGenerator.declare_array(ID, isGlobal)
     if type == "BOOL":
-        LLVMGenerator.declare_bool(ID, False)
+        LLVMGenerator.declare_bool(ID, isGlobal)
 
 # todo: change all those load generators to take ID, this ID already has scope in it
 def loadType(type, scopedID):
@@ -327,25 +385,25 @@ def getVariable(self, ID, line):
         if ID in self.global_vars:
             return "@" + ID, self.global_vars[ID]
         else:
-            error(line, "unknown global variable " + ID)
+            error(line, "getVariable unknown global variable " + ID)
     else:
         if ID in self.local_vars:
             return "%" + ID, self.local_vars[ID]
         elif ID in self.global_vars:
             return "@" + ID, self.global_vars[ID]
         else:
-            error(line, "unknown variable " + ID)
+            error(line, "getVariable unknown variable " + ID)
 
 # sprawdź context, zapisz w local/global, zwróć scoped id
 def setVariable(self, ID, value):
     if self.global_:
         if ID not in self.global_vars:
-            declareType(value.type, ID)
+            declareType(value.type, ID, True)
         self.global_vars[ID] = value
         scopedID = "@" + ID
     else:
         if ID not in self.local_vars:
-            declareType(value.type, ID)
+            declareType(value.type, ID, False)
         self.local_vars[ID] = value
         scopedID = "%" + ID
 

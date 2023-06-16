@@ -17,7 +17,7 @@ statement
     | functionCall 
     | functionCallOnObject 
     | functionCallOnString
-    | loopTill
+    | loopTimes
     ;
 
 variableDeclaration : dataType ID ;
@@ -99,12 +99,12 @@ ifElseStatement: IF condition ifBlock ELSE elseBlock;
 ifStatement: IF condition ifBlock;
 condition :  LPAREN comparisonExp RPAREN;
 comparisonExp
-    : value LT value    #lesserThan
-    | value LTE value   #lesserThanEqual
-    | value GT value    #greaterThan
-    | value GTE value   #greaterThanEqual
-    | value EQ value    #isEqual
-    | value NEQ value   #notEqual
+    : ID LT value    #lesserThan
+    | ID LTE value   #lesserThanEqual
+    | ID GT value    #greaterThan
+    | ID GTE value   #greaterThanEqual
+    | ID EQ value    #isEqual
+    | ID NEQ value   #notEqual
     ;
 
 ifBlock : block;
@@ -114,9 +114,11 @@ elseBlock : block;
 functionDefinition: dataType FUNCTION ID LPAREN (variableDeclaration (COMMA variableDeclaration)*)? RPAREN functionBlock;
 
 //loop
-loopTill: LOOP loopBlock TILL loopCondition;
+loopTimes: LOOP TIMES LPAREN repetitions RPAREN loopBlock ;
+repetitions
+    : INT
+    ;
 loopBlock: block;
-loopCondition: condition;
 
 value
     : ID
@@ -149,7 +151,7 @@ functionBlock: block;
 // returnStat: RETURN expression SEMI;
 
 LOOP: 'loop';
-TILL: 'till';
+TIMES: 'times';
 
 AND : '&&' ;
 OR : '||' ;
