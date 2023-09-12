@@ -111,8 +111,8 @@ ifBlock : block;
 elseBlock : block;
 
 //function
-functionDefinition: dataType FUNCTION ID LPAREN (variableDeclaration (COMMA variableDeclaration)*)? RPAREN functionBlock;
-
+functionDefinition: dataType FUNCTION ID LPAREN functionParams RPAREN functionBlock;
+functionParams :(variableDeclaration (COMMA variableDeclaration)*)?;
 //loop
 loopTimes: LOOP TIMES LPAREN repetitions RPAREN loopBlock ;
 repetitions

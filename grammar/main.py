@@ -4,7 +4,8 @@ from DallasParser import DallasParser
 from LLVMActions import LLVMActions
 
 def main():
-    input_stream = FileStream("./test.Dallas")
+    # input_stream = FileStream("./test.Dallas")
+    input_stream = FileStream("../test/declare-math-print.Dallas")
     lexer = DallasLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
     parser = DallasParser(token_stream)

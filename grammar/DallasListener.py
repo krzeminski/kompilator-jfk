@@ -422,6 +422,15 @@ class DallasListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by DallasParser#functionParams.
+    def enterFunctionParams(self, ctx:DallasParser.FunctionParamsContext):
+        pass
+
+    # Exit a parse tree produced by DallasParser#functionParams.
+    def exitFunctionParams(self, ctx:DallasParser.FunctionParamsContext):
+        pass
+
+
     # Enter a parse tree produced by DallasParser#loopTimes.
     def enterLoopTimes(self, ctx:DallasParser.LoopTimesContext):
         pass
